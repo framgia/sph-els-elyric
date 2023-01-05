@@ -9,19 +9,6 @@ export default function RegistrationForm() {
 
 	async function signUp(event) {
 		event.preventDefault();
-		let userData = { name, email, password };
-
-		let result = await fetch("http://127.0.0.1:8000/api/register", {
-			method: "POST",
-			body: JSON.stringify(userData),
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-		});
-
-		result = await result.json();
-		console.log(result);
 	}
 
 	return (
