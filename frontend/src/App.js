@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
 import HeaderNav from "./components/HeaderNav";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
     return (
@@ -13,6 +15,18 @@ function App() {
                     <Route path="/register" element={<RegistrationPage />} />
                 </Routes>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 }

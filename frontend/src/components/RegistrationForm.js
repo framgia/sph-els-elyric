@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function RegistrationForm() {
     const [name, setName] = useState("");
@@ -9,6 +11,34 @@ export default function RegistrationForm() {
 
     async function signUp(event) {
         event.preventDefault();
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8000/api/register",
+                {
+                    name,
+                    email,
+                    password,
+                }
+            );
+
+            setName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            toast.success(response.data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
