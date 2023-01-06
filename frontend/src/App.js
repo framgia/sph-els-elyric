@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
 import HeaderNav from "./components/HeaderNav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +14,7 @@ function App() {
             <div className="mx-20">
                 <Routes>
                     <Route path="/register" element={<RegistrationPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                 </Routes>
             </div>
             <ToastContainer
