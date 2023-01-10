@@ -14,7 +14,14 @@ class UserController extends Controller
 			'name'=> 'required|string|max:255',
 			'email'=>'required|string|email|max:255|unique:users',
 			'password'=>'required|min:6',
+			'confirmPassword'=> 'required|string',
 		]);
+
+		if($request->password !== $request->confirmPassword){
+			return response()->json([
+				'message' => 'Passwords do not Match!',
+			], 400);
+		}
 
 		$user = User::create([
 			'name'=>$request->name,
