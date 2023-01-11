@@ -1,11 +1,11 @@
-import axios from "axios";
+import { instance } from "./instance";
 
-export async function register(name, email, password, confirmPassword) {
-    const response = await axios.post("http://localhost:8000/api/register", {
+export async function register(name, email, password, password_confirmation) {
+    const response = await instance.post("/register", {
         name,
         email,
         password,
-        confirmPassword,
+        password_confirmation,
     });
 
     return response.data.message;

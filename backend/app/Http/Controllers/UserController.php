@@ -11,17 +11,10 @@ class UserController extends Controller
     public function register(Request $request){
 
 		$request->validate([
-			'name'=> 'required|string|max:255',
-			'email'=>'required|string|email|max:255|unique:users',
-			'password'=>'required|min:6',
-			'confirmPassword'=> 'required|string',
+			'name' => 'required|string',
+    		'email' => 'required|string|email|unique:users',
+    		'password' => 'required|string|confirmed',
 		]);
-
-		if($request->password !== $request->confirmPassword){
-			return response()->json([
-				'message' => 'Passwords do not Match!',
-			], 400);
-		}
 
 		$user = User::create([
 			'name'=>$request->name,

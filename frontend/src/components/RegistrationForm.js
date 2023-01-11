@@ -9,7 +9,7 @@ export default function RegistrationForm() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [password_confirmation, setPassword_confirmation] = useState("");
 
     const [errors, setErrors] = useState({});
 
@@ -32,10 +32,10 @@ export default function RegistrationForm() {
             newErrors.password = "Password must be at least 8 characters";
         }
 
-        if (confirmPassword != password) {
-            newErrors.confirmPassword = "Passwords do not match";
-        } else if (!confirmPassword) {
-            newErrors.confirmPassword = "Password is required";
+        if (password_confirmation !== password) {
+            newErrors.password_confirmation = "Passwords do not match";
+        } else if (!password_confirmation) {
+            newErrors.password_confirmation = "Password is required";
         }
 
         setErrors(newErrors);
@@ -51,7 +51,7 @@ export default function RegistrationForm() {
                     name,
                     email,
                     password,
-                    confirmPassword
+                    password_confirmation
                 );
 
                 showToast("success", message);
@@ -59,7 +59,7 @@ export default function RegistrationForm() {
                 setName("");
                 setEmail("");
                 setPassword("");
-                setConfirmPassword("");
+                setPassword_confirmation("");
             } catch (e) {
                 showToast("error", e);
             }
@@ -132,8 +132,8 @@ export default function RegistrationForm() {
                     Confirm Password
                 </label>
                 <input
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={password_confirmation}
+                    onChange={(e) => setPassword_confirmation(e.target.value)}
                     id="confirm_password"
                     type="password"
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
