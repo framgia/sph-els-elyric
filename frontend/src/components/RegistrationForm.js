@@ -1,14 +1,69 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useToast } from "../hooks/useToast";
+import { register } from "../api/api";
 
 export default function RegistrationForm() {
+    const { showToast } = useToast();
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [password_confirmation, setPassword_confirmation] = useState("");
+
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        let newErrors = {};
+
+        if (!name) {
+            newErrors.name = "Name is required";
+        }
+
+        if (!email) {
+            newErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = "Email is invalid";
+        }
+
+        if (!password) {
+            newErrors.password = "Password is required";
+        } else if (password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters";
+        }
+
+        if (password_confirmation !== password) {
+            newErrors.password_confirmation = "Passwords do not match";
+        } else if (!password_confirmation) {
+            newErrors.password_confirmation = "Password is required";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     async function signUp(event) {
         event.preventDefault();
+
+        if (validateForm()) {
+            try {
+                const message = await register(
+                    name,
+                    email,
+                    password,
+                    password_confirmation
+                );
+
+                showToast("success", message);
+
+                setName("");
+                setEmail("");
+                setPassword("");
+                setPassword_confirmation("");
+            } catch (e) {
+                showToast("error", e);
+            }
+        }
     }
 
     return (
@@ -33,6 +88,9 @@ export default function RegistrationForm() {
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
                     placeholder="Enter your Name..."
                 />
+                {errors.name && (
+                    <p className="text-md text-red-500">{errors.name}</p>
+                )}
             </div>
             <div className="flex flex-col items-start mb-5 gap-y-3">
                 <label htmlFor="email" className="text-md font-medium">
@@ -46,6 +104,9 @@ export default function RegistrationForm() {
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
                     placeholder="Enter your email address..."
                 />
+                {errors.email && (
+                    <p className="text-md text-red-500">{errors.email}</p>
+                )}
             </div>
             <div className="flex flex-col items-start mb-5 gap-y-3">
                 <label htmlFor="password" className="text-md font-medium">
@@ -59,6 +120,9 @@ export default function RegistrationForm() {
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
                     placeholder="Enter your password"
                 />
+                {errors.password && (
+                    <p className="text-md text-red-500">{errors.password}</p>
+                )}
             </div>
             <div className="flex flex-col items-start mb-10 gap-y-3">
                 <label
@@ -68,13 +132,18 @@ export default function RegistrationForm() {
                     Confirm Password
                 </label>
                 <input
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={password_confirmation}
+                    onChange={(e) => setPassword_confirmation(e.target.value)}
                     id="confirm_password"
                     type="password"
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
                     placeholder="Retype your password"
                 />
+                {errors.confirmPassword && (
+                    <p className="text-md text-red-500">
+                        {errors.confirmPassword}
+                    </p>
+                )}
             </div>
 
             <button
