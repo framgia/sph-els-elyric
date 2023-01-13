@@ -139,9 +139,9 @@ export default function UserRegistrationForm() {
                     className="w-full p-4 bg-transparent border border-gray-200 rounded-lg outline-none"
                     placeholder="Retype your password"
                 />
-                {errors.confirmPassword && (
+                {errors.password_confirmation && (
                     <p className="text-md text-red-500">
-                        {errors.confirmPassword}
+                        {errors.password_confirmation}
                     </p>
                 )}
             </div>

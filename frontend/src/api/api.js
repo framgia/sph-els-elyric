@@ -21,7 +21,7 @@ export async function registerAdmin(
     password,
     password_confirmation
 ) {
-    const response = await adminInstance.post("/admin/register", {
+    const response = await adminInstance.post("/register", {
         name,
         email,
         password,
