@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useToast } from "../hooks/useToast";
-import { register } from "../api/api";
+import { useToast } from "../../hooks/useToast";
+import { registerUser } from "../../api/api";
 
-export default function RegistrationForm() {
+export default function UserRegistrationForm() {
     const { showToast } = useToast();
 
     const [name, setName] = useState("");
@@ -47,7 +47,7 @@ export default function RegistrationForm() {
 
         if (validateForm()) {
             try {
-                const message = await register(
+                const message = await registerUser(
                     name,
                     email,
                     password,
@@ -74,7 +74,7 @@ export default function RegistrationForm() {
             aria-label="signup-form"
         >
             <h2 className="mb-10 text-3xl font-bold text-center">
-                Signup Account
+                Signup User Account
             </h2>
             <div className="flex flex-col items-start mb-5 gap-y-3">
                 <label htmlFor="name" className="text-md font-medium">
