@@ -3,7 +3,6 @@ import HeaderNav from "./components/HeaderNav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserRegistrationPage from "./pages/user/UserRegistrationPage";
-import AdminRegistrationPage from "./pages/admin/AdminRegistrationPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import LoginPage from "./pages/LoginPage";
 
@@ -15,12 +14,6 @@ function App() {
             </div>
 
             {/* ADMIN ROUTE  */}
-            <Routes className="mx-20">
-                <Route
-                    path="admin/register"
-                    element={<AdminRegistrationPage />}
-                />
-            </Routes>
 
             {/* USER ROUTE  */}
             <Routes className="mx-20">
