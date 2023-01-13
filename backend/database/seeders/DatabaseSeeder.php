@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,15 +23,4 @@ class DatabaseSeeder extends Seeder
 		$this->call(AdminSeeder::class);
     }
 }
-
-class AdminSeeder extends Seeder
-{
-	public function run()
-	{
-		Admin::create([
-			'name' => 'Elyric Admin',
-			'email' => 'elyric@admin.com',
-			'password' => bcrypt('password123'),
-		]);
-	}
-}
+//
