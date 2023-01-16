@@ -27,7 +27,6 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(f
 	Route::get('details', [AdminController::class, 'userDetails']);
 	Route::get('logout', [AdminController::class, 'logout']);
 });
-
  
 // USER ROUTE
 Route::post('register', [UserController::class, 'register']);
@@ -37,3 +36,4 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
 	Route::get('details', [UserController::class, 'userDetails']);
 	Route::get('logout', [UserController::class, 'logout']);
 });
+Route::post('register', [UserController::class, 'register']);
