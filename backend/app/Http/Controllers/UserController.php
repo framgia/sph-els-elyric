@@ -9,8 +9,8 @@ use Auth;
 
 class UserController extends Controller
 {
-    public function register(Request $request){
-
+    public function register(Request $request)
+	{
 		$request->validate([
 			'name' => 'required|string',
     		'email' => 'required|string|email|unique:users',
@@ -30,39 +30,43 @@ class UserController extends Controller
 	}
 
 
-	public function login(Request $request){
-	$request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
-	
-    $user = User::where('email', $request->email)->first();
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid email or password'], 401);
-    }
+	public function login(Request $request)
+	{
+		$request->validate([
+    	    'email' => 'required|email',
+    	    'password' => 'required'
+    	]);
 
-    if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])){
-		$user = Auth::guard('user')->user();
-		$token = $user->createToken('MyApp', ['user'])->plainTextToken;
-		return response()->json([
-			'message' => 'User Successfully Authenticated!',
-			'token' => $token,
-			'redirect' => 'user-dashboard'
-		]);
+    	$user = User::where('email', $request->email)->first();
+
+    	if (! $user || ! Hash::check($request->password, $user->password)) {
+    	    return response()->json(['message' => 'Invalid email or password'], 401);
+    	}
+
+    	if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])){
+			$user = Auth::guard('user')->user();
+			$token = $user->createToken('MyApp', ['user'])->plainTextToken;
+			return response()->json([
+				'message' => 'User Successfully Authenticated!',
+				'token' => $token,
+				'redirect' => 'user-dashboard'
+			]);
+		}
 	}
-}
 
-	public function logout(Request $request){
-    if($request->user()){
-        $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            'message' => 'User Successfully Logged out!'
-        ]);
-    }
-    return response()->json(['error' => 'Unauthenticated'], 401);
-}
+	public function logout(Request $request)
+	{
+    	if($request->user()){
+    	    $request->user()->currentAccessToken()->delete();
+    	    return response()->json([
+    	        'message' => 'User Successfully Logged out!'
+    	    ]);
+    	}
+    	return response()->json(['error' => 'Unauthenticated'], 401);
+	}
 
-	public function userDetails(){
+	public function userDetails()
+	{
 		$user = Auth::user();
 		return response()->json(['data' => $user]);
 	}
