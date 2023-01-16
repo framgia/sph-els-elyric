@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +16,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-// ADMIN ROUTE 
-Route::post('admin/register', [AdminController::class, 'register']);
+// ADMIN ROUTE
+Route::post('admin/login', [AdminController::class, 'login']);
 
-// USER ROUTE 
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
+	Route::get('details', [AdminController::class, 'userDetails']);
+	Route::get('logout', [AdminController::class, 'logout']);
+ });
+
+ 
+// USER ROUTE
 Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
+
+Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
+	Route::get('details', [UserController::class, 'userDetails']);
+	Route::get('logout', [UserController::class, 'logout']);
+});
