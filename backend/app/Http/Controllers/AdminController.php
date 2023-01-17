@@ -44,9 +44,4 @@ class AdminController extends Controller
     	return response()->json(['error' => 'Unauthenticated'], 401);
 	}
 
-	public function userDetails()
-	{
-		$user = Auth::user();
-		return response()->json(['data' => $user]);
-	}
 }

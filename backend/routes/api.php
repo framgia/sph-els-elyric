@@ -24,7 +24,6 @@ use App\Http\Controllers\UserController;
 Route::post('admin/login', [AdminController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
-	Route::get('details', [AdminController::class, 'userDetails']);
 	Route::get('logout', [AdminController::class, 'logout']);
 });
 
