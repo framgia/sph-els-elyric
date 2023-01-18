@@ -27,8 +27,8 @@ class AdminController extends Controller
 			$token = $user->createToken('MyApp', ['admin'])->plainTextToken;
 			return response()->json([
 				'message' => 'Admin Successfully Authenticated!',
-				'token' => $token,
-				'redirect' => 'admin-dashboard'
+				'admin_token' => $token,
+				'redirect' => '/admin/dashboard'
 			]);
 		}
 	}
@@ -44,9 +44,18 @@ class AdminController extends Controller
     	return response()->json(['error' => 'Unauthenticated'], 401);
 	}
 
-	public function userDetails()
-	{
-		$user = Auth::user();
-		return response()->json(['data' => $user]);
-	}
+	public function authChecker()
+    {
+        if (Auth::guard('admin')->check()) {
+            return response()->json([
+                'message' => 'Admin user is logged in',
+                'user' => Auth::guard('admin')->user()
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Admin user is not logged in'
+            ], 401);
+        }
+    }
+
 }

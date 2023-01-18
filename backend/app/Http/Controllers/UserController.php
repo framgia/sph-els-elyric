@@ -48,7 +48,8 @@ class UserController extends Controller
 			return response()->json([
 				'message' => 'User Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => 'user-dashboard'
+				'redirect' => '/dashboard',
+				'authenticated' => true
 			]);
 		}
 	}
@@ -58,7 +59,7 @@ class UserController extends Controller
     	if($request->user()){
     	    $request->user()->currentAccessToken()->delete();
     	    return response()->json([
-    	        'message' => 'User Successfully Logged out!'
+    	        'message' => 'User Successfully Logged out!'	
     	    ]);
     	}
     	return response()->json(['error' => 'Unauthenticated'], 401);

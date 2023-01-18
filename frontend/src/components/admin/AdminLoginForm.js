@@ -1,25 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useToast } from "../../hooks/useToast";
+import { loginAdmin } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
+export default function AdminLoginForm({ isAdmin, setIsAdmin }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [response, setResponse] = useState({});
+    const { showToast } = useToast();
+    const navigate = useNavigate();
 
-    const handleLogin = async (event) => {
+    const handleAdminLogin = async (event) => {
         event.preventDefault();
+
+        try {
+            const response = await loginAdmin(email, password);
+            console.log(response);
+            localStorage.setItem("admin_token", response.admin_token);
+            localStorage.setItem("isAdmin", true);
+            const getToken = localStorage.getItem("isAdmin");
+            setIsAdmin(getToken);
+            console.log("isAdmin: ", getToken);
+            navigate(response.redirect);
+
+            showToast("success", response.message);
+
+            setEmail("");
+            setPassword("");
+            setResponse(response.redirect);
+        } catch (e) {
+            showToast("error", e);
+        }
     };
 
-    console.log(email, password);
+    useEffect(() => {
+        if (response.redirect) {
+            navigate.push(`/${response.redirect}`);
+        }
+    }, [response, navigate]);
 
     return (
         <form
-            onSubmit={handleLogin}
+            onSubmit={handleAdminLogin}
             autoComplete="off"
             className="w-full max-w-[450px] px-10 py-16 bg-white border border-gray-100 rounded-lg shadow-lg"
             aria-label="signup-form"
         >
             <h2 className="mb-10 text-3xl font-bold text-center">
-                Login Account
+                Login Admin Account
             </h2>
 
             <div className="flex flex-col items-start mb-5 gap-y-3">
@@ -56,13 +85,13 @@ export default function LoginForm() {
                 Login
             </button>
             <div className="flex items-center justify-center mt-5 text-slate-400">
-                <p>Doesn't have an account? &nbsp;</p>
+                <p>Need an Admin account? &nbsp;</p>
                 <Link
-                    to="/register"
+                    to="/developer"
                     className="text-blue-500 underline"
                     aria-current="page"
                 >
-                    Sign Up
+                    Contact Developer
                 </Link>
             </div>
         </form>

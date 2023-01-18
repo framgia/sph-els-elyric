@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import { useNavbar } from "../hooks/useNavbar";
+import Logout from "./Logout";
 
-export default function HeaderNav() {
+export default function HeaderNav({ isAuth }) {
     const { currentRoute, navigateTo } = useNavbar();
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigateTo("admin/login");
+    };
     const inActiveClass =
         "text-gray-50 hover:text-gray-100 text-lg font-semibold hover:underline";
     const activeClass =
@@ -15,17 +21,19 @@ export default function HeaderNav() {
             </Link>
 
             <div className="flex gap-5 ml-auto">
-                <Link
-                    to="/categories"
-                    className={
-                        currentRoute === "categories"
-                            ? activeClass
-                            : inActiveClass
-                    }
-                    onClick={() => navigateTo("categories")}
-                >
-                    Categories
-                </Link>
+                {isAuth && (
+                    <Link
+                        to="/categories"
+                        className={
+                            currentRoute === "categories"
+                                ? activeClass
+                                : inActiveClass
+                        }
+                        onClick={() => navigateTo("categories")}
+                    >
+                        Categories
+                    </Link>
+                )}
                 <Link
                     to="/login"
                     className={
@@ -35,6 +43,14 @@ export default function HeaderNav() {
                 >
                     Signin
                 </Link>
+
+                {isAuth && (
+                    <Logout
+                        logout={handleLogout}
+                        inActiveClass={inActiveClass}
+                    />
+                )}
+
                 <Link
                     to="/register"
                     className={
