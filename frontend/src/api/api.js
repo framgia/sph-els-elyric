@@ -39,7 +39,6 @@ export async function userLogout() {
 }
 
 export async function checkAuthUser() {
-    const token = localStorage.getItem("token");
     const response = await userInstance.get("/auth/check");
     return response;
 }
