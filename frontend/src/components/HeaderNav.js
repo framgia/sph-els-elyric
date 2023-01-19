@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import { useNavbar } from "../hooks/useNavbar";
-import Logout from "./Logout";
+import UserLogout from "./userLogout";
+import AdminLogout from "./adminLogout";
+import useIsAdmin from "../hooks/useIsAdmin";
 
-export default function HeaderNav({ isAuth }) {
+export default function HeaderNav() {
+    const isAdmin = useIsAdmin();
     const { currentRoute, navigateTo } = useNavbar();
 
-    const handleLogout = () => {
-        localStorage.clear();
-        navigateTo("admin/login");
-    };
     const inActiveClass =
         "text-gray-50 hover:text-gray-100 text-lg font-semibold hover:underline";
     const activeClass =
@@ -21,19 +20,17 @@ export default function HeaderNav({ isAuth }) {
             </Link>
 
             <div className="flex gap-5 ml-auto">
-                {isAuth && (
-                    <Link
-                        to="/categories"
-                        className={
-                            currentRoute === "categories"
-                                ? activeClass
-                                : inActiveClass
-                        }
-                        onClick={() => navigateTo("categories")}
-                    >
-                        Categories
-                    </Link>
-                )}
+                <Link
+                    to="/categories"
+                    className={
+                        currentRoute === "categories"
+                            ? activeClass
+                            : inActiveClass
+                    }
+                    onClick={() => navigateTo("categories")}
+                >
+                    Categories
+                </Link>
                 <Link
                     to="/login"
                     className={
@@ -43,13 +40,6 @@ export default function HeaderNav({ isAuth }) {
                 >
                     Signin
                 </Link>
-
-                {isAuth && (
-                    <Logout
-                        logout={handleLogout}
-                        inActiveClass={inActiveClass}
-                    />
-                )}
 
                 <Link
                     to="/register"
@@ -62,6 +52,8 @@ export default function HeaderNav({ isAuth }) {
                 >
                     Signup
                 </Link>
+                {!isAdmin && <UserLogout inActiveClass={inActiveClass} />}
+                {isAdmin && <AdminLogout inActiveClass={inActiveClass} />}
             </div>
         </div>
     );

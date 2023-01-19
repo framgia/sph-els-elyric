@@ -8,54 +8,31 @@ import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import ProtectedUserRoutes from "./ProtectedUserRoutes";
 import ProtectedAdminRoutes from "./ProtectedAdminRoutes";
 
-export default function MainRoutes({ isAuth, isAdmin, setIsAdmin }) {
-    console.log("MainisAuth: ", isAuth);
+export default function MainRoutes() {
     return (
         <div>
             <Routes className="mx-20">
-                {isAuth && (
-                    <>
-                        {/* ADMIN ROUTE  */}
-                        <Route
-                            path="admin/login"
-                            element={
-                                <AdminLoginPage
-                                    isAdmin={isAdmin}
-                                    setIsAdmin={setIsAdmin}
-                                />
-                            }
-                        />
-                    </>
-                )}
+                {/* UNPROTECTED ADMIN ROUTE  */}
+                <Route path="admin/login" element={<AdminLoginPage />} />
 
-                {/* USER ROUTE  */}
+                {/* UNPROTECTED USER ROUTE  */}
                 <Route path="/register" element={<UserRegistrationPage />} />
                 <Route path="/login" element={<UserLoginPage />} />
 
-                {isAuth && (
-                    <>
-                        {/* PROTECTED ADMIN ROUTES  */}
-                        <Route element={<ProtectedAdminRoutes />}>
-                            <Route
-                                path="/admin/dashboard"
-                                element={<AdminDashboardPage isAuth={isAuth} />}
-                            />
-                        </Route>
+                {/* PROTECTED ADMIN ROUTES  */}
+                <Route element={<ProtectedAdminRoutes />}>
+                    <Route
+                        path="/admin/dashboard"
+                        element={<AdminDashboardPage />}
+                    />
+                </Route>
 
-                        {/* PROTECTED USER ROUTES  */}
-                        <Route element={<ProtectedUserRoutes />}>
-                            <Route
-                                path="/dashboard"
-                                element={<UserDashboardPage />}
-                            />
-                            <Route
-                                path="/categories"
-                                element={<CategoriesPage />}
-                            />
-                        </Route>
-                    </>
-                )}
-                <Route path="*" element={<Navigate to={"/login"} />} />
+                {/* PROTECTED USER ROUTES  */}
+                <Route element={<ProtectedUserRoutes />}>
+                    <Route path="/dashboard" element={<UserDashboardPage />} />
+                    <Route path="/categories" element={<CategoriesPage />} />
+                </Route>
+                {/* <Route path="*" element={<Navigate to={"/login"} />} /> */}
             </Routes>
         </div>
     );

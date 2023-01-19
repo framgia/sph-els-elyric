@@ -27,7 +27,7 @@ class AdminController extends Controller
 			return response()->json([
 				'message' => 'Admin Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => 'admin-dashboard'
+				'redirect' => '/admin/dashboard'
 			]);
 		}
 	}

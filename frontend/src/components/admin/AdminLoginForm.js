@@ -4,10 +4,9 @@ import { useToast } from "../../hooks/useToast";
 import { loginAdmin } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 
-export default function AdminLoginForm({ isAdmin, setIsAdmin }) {
+export default function AdminLoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [response, setResponse] = useState({});
     const { showToast } = useToast();
     const navigate = useNavigate();
 
@@ -17,28 +16,14 @@ export default function AdminLoginForm({ isAdmin, setIsAdmin }) {
         try {
             const response = await loginAdmin(email, password);
             console.log(response);
-            localStorage.setItem("admin_token", response.admin_token);
+            localStorage.setItem("admin_token", response.token);
             localStorage.setItem("isAdmin", true);
-            const getToken = localStorage.getItem("isAdmin");
-            setIsAdmin(getToken);
-            console.log("isAdmin: ", getToken);
-            navigate(response.redirect);
-
             showToast("success", response.message);
-
-            setEmail("");
-            setPassword("");
-            setResponse(response.redirect);
+            navigate(response.redirect);
         } catch (e) {
             showToast("error", e);
         }
     };
-
-    useEffect(() => {
-        if (response.redirect) {
-            navigate.push(`/${response.redirect}`);
-        }
-    }, [response, navigate]);
 
     return (
         <form

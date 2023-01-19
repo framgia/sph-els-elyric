@@ -48,7 +48,7 @@ class UserController extends Controller
 			return response()->json([
 				'message' => 'User Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => 'user-dashboard'
+				'redirect' => '/dashboard'
 			]);
 		}
 	}
@@ -62,5 +62,11 @@ class UserController extends Controller
     	    ]);
     	}
     	return response()->json(['error' => 'Unauthenticated'], 401);
+	}
+
+	public function userDetails()
+	{
+		$user = Auth::user();
+		return response()->json(['data' => $user]);
 	}
 }

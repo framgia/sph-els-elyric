@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 export default function UserLoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [response, setResponse] = useState({});
     const { showToast } = useToast();
     const navigate = useNavigate();
 
@@ -16,26 +15,14 @@ export default function UserLoginForm() {
 
         try {
             const response = await loginUser(email, password);
-            console.log(response);
             localStorage.setItem("token", response.token);
             localStorage.setItem("isAdmin", false);
-            navigate(response.redirect);
-            console.log();
             showToast("success", response.message);
-
-            setEmail("");
-            setPassword("");
-            setResponse(response.redirect);
+            navigate(response.redirect);
         } catch (e) {
             showToast("error", e);
         }
     };
-
-    useEffect(() => {
-        if (response.redirect) {
-            navigate.push(`/${response.redirect}`);
-        }
-    }, [response, navigate]);
 
     return (
         <form
