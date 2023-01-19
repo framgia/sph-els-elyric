@@ -17,8 +17,7 @@ class AdminController extends Controller
     	]);
 		
     	$user = Admin::where('email', $request->email)->first();
-		
-    	if (! $user || ! Hash::check($request->password, $user->password)){
+    	if (! $user || ! Hash::check($request->password, $user->password)) {
     	    return response()->json(['message' => 'Invalid email or password'], 401);
     	}
 	
@@ -27,8 +26,8 @@ class AdminController extends Controller
 			$token = $user->createToken('MyApp', ['admin'])->plainTextToken;
 			return response()->json([
 				'message' => 'Admin Successfully Authenticated!',
-				'admin_token' => $token,
-				'redirect' => '/admin/dashboard'
+				'token' => $token,
+				'redirect' => 'admin-dashboard'
 			]);
 		}
 	}
@@ -43,19 +42,5 @@ class AdminController extends Controller
     	}
     	return response()->json(['error' => 'Unauthenticated'], 401);
 	}
-
-	public function authChecker()
-    {
-        if (Auth::guard('admin')->check()) {
-            return response()->json([
-                'message' => 'Admin user is logged in',
-                'user' => Auth::guard('admin')->user()
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Admin user is not logged in'
-            ], 401);
-        }
-    }
 
 }

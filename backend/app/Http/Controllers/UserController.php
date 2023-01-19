@@ -29,27 +29,26 @@ class UserController extends Controller
 		]);
 	}
 
+
 	public function login(Request $request)
 	{
 		$request->validate([
     	    'email' => 'required|email',
     	    'password' => 'required'
     	]);
-	
+
     	$user = User::where('email', $request->email)->first();
-		
-    	if (! $user || ! Hash::check($request->password, $user->password)){
+    	if (! $user || ! Hash::check($request->password, $user->password)) {
     	    return response()->json(['message' => 'Invalid email or password'], 401);
     	}
 
-    	if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])){
+    	if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => 	$request->password])){
 			$user = Auth::guard('user')->user();
 			$token = $user->createToken('MyApp', ['user'])->plainTextToken;
 			return response()->json([
 				'message' => 'User Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => '/dashboard',
-				'authenticated' => true
+				'redirect' => 'user-dashboard'
 			]);
 		}
 	}
@@ -59,15 +58,9 @@ class UserController extends Controller
     	if($request->user()){
     	    $request->user()->currentAccessToken()->delete();
     	    return response()->json([
-    	        'message' => 'User Successfully Logged out!'	
+    	        'message' => 'User Successfully Logged out!'
     	    ]);
     	}
     	return response()->json(['error' => 'Unauthenticated'], 401);
-	}
-
-	public function userDetails()
-	{
-		$user = Auth::user();
-		return response()->json(['data' => $user]);
 	}
 }

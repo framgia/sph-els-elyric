@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthChecker;
-use App\Http\Controllers\User\UserDashboard;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
@@ -27,8 +24,7 @@ Route::post('admin/login', [AdminController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
 	Route::get('logout', [AdminController::class, 'logout']);
- });
-
+});
  
 // USER ROUTE
 Route::post('register', [UserController::class, 'register']);
