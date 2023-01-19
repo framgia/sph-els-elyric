@@ -28,6 +28,9 @@ export async function loginUser(email, password) {
 export async function userLogout() {
     try {
         const response = await userInstance.get("/logout");
+        localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
+        window.location.href = "/login";
 
         return response.data;
     } catch (error) {
@@ -36,6 +39,7 @@ export async function userLogout() {
 }
 
 export async function checkAuthUser() {
+    const token = localStorage.getItem("token");
     const response = await userInstance.get("/auth/check");
     return response;
 }
@@ -54,6 +58,9 @@ export async function loginAdmin(email, password) {
 export async function adminLogout() {
     try {
         const response = await adminInstance.get("/logout");
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("isAdmin");
+        window.location.href = "/admin/login";
 
         return response.data;
     } catch (error) {
