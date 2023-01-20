@@ -5,6 +5,7 @@ import UserLoginPage from "../pages/user/UserLoginPage";
 import UserDashboardPage from "../pages/user/UserDashboardPage";
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage";
 import ProtectedUserRoutes from "./ProtectedUserRoutes";
 import ProtectedAdminRoutes from "./ProtectedAdminRoutes";
 
@@ -24,6 +25,10 @@ export default function MainRoutes() {
                     <Route
                         path="/admin/dashboard"
                         element={<AdminDashboardPage />}
+                    />
+                    <Route
+                        path="/admin/categories"
+                        element={<AdminCategoriesPage />}
                     />
                 </Route>
 
