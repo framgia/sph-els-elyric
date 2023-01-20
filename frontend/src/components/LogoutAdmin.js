@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { adminLogout } from "../api/api";
 
-function useAdminLogout({ inActiveClass }) {
+function LogoutAdmin({ inActiveClass }) {
     const handleLogout = async () => {
         await adminLogout();
 
@@ -18,4 +18,4 @@ function useAdminLogout({ inActiveClass }) {
     );
 }
 
-export default useAdminLogout;
+export default LogoutAdmin;
