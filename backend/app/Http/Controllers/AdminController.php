@@ -15,20 +15,19 @@ class AdminController extends Controller
     	    'email' => 'required|email',
     	    'password' => 'required'
     	]);
-
+		
     	$user = Admin::where('email', $request->email)->first();
-
     	if (! $user || ! Hash::check($request->password, $user->password)) {
     	    return response()->json(['message' => 'Invalid email or password'], 401);
     	}
-
+	
     	if(Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])){
 			$user = Auth::guard('admin')->user();
 			$token = $user->createToken('MyApp', ['admin'])->plainTextToken;
 			return response()->json([
 				'message' => 'Admin Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => 'admin-dashboard'
+				'redirect' => '/admin/dashboard'
 			]);
 		}
 	}

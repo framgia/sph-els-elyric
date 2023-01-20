@@ -29,26 +29,26 @@ class UserController extends Controller
 		]);
 	}
 
+
 	public function login(Request $request)
 	{
-		 $request->validate([
+		$request->validate([
     	    'email' => 'required|email',
     	    'password' => 'required'
     	]);
 
     	$user = User::where('email', $request->email)->first();
-
     	if (! $user || ! Hash::check($request->password, $user->password)) {
     	    return response()->json(['message' => 'Invalid email or password'], 401);
     	}
 
-    	if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])){
+    	if(Auth::guard('user')->attempt(['email' => $request->email, 'password' => 	$request->password])){
 			$user = Auth::guard('user')->user();
 			$token = $user->createToken('MyApp', ['user'])->plainTextToken;
 			return response()->json([
 				'message' => 'User Successfully Authenticated!',
 				'token' => $token,
-				'redirect' => 'user-dashboard'
+				'redirect' => '/dashboard'
 			]);
 		}
 	}

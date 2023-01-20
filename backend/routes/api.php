@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
@@ -32,7 +31,5 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
-	Route::get('details', [UserController::class, 'userDetails']);
 	Route::get('logout', [UserController::class, 'logout']);
 });
-Route::post('register', [UserController::class, 'register']);

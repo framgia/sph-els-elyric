@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 import { useNavbar } from "../hooks/useNavbar";
+import UserLogout from "./userLogout";
+import AdminLogout from "./LogoutAdmin";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function HeaderNav() {
+    const { IsAdmin } = useLocalStorage();
     const { currentRoute, navigateTo } = useNavbar();
+
     const inActiveClass =
         "text-gray-50 hover:text-gray-100 text-lg font-semibold hover:underline";
     const activeClass =
@@ -35,6 +40,7 @@ export default function HeaderNav() {
                 >
                     Signin
                 </Link>
+
                 <Link
                     to="/register"
                     className={
@@ -46,6 +52,8 @@ export default function HeaderNav() {
                 >
                     Signup
                 </Link>
+                {!IsAdmin && <UserLogout inActiveClass={inActiveClass} />}
+                {IsAdmin && <AdminLogout inActiveClass={inActiveClass} />}
             </div>
         </div>
     );

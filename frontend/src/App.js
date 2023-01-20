@@ -1,10 +1,7 @@
-import { Route, Routes } from "react-router-dom";
 import HeaderNav from "./components/HeaderNav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserRegistrationPage from "./pages/user/UserRegistrationPage";
-import CategoriesPage from "./pages/CategoriesPage";
-import LoginPage from "./pages/LoginPage";
+import MainRoutes from "./Routes/MainRoutes";
 
 function App() {
     return (
@@ -12,16 +9,7 @@ function App() {
             <div className="px-10 py-5 bg-gradient-to-b from-[#617EFF] to-[#34B3F9] text-gray-50">
                 <HeaderNav />
             </div>
-
-            {/* ADMIN ROUTE  */}
-
-            {/* USER ROUTE  */}
-            <Routes className="mx-20">
-                <Route path="/register" element={<UserRegistrationPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/categories" element={<CategoriesPage />} />
-            </Routes>
-
+            <MainRoutes />
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
