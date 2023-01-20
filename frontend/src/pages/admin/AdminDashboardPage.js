@@ -1,9 +1,9 @@
-import useIsAdmin from "../../hooks/useIsAdmin";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 export default function AdminDashboard() {
-    const adminIsLoggedIn = useIsAdmin();
+    const { IsAdmin } = useLocalStorage();
 
-    if (adminIsLoggedIn) {
+    if (IsAdmin) {
         return <p>Welcome ADMIN! You are logged in.</p>;
     }
     return <p>You are not logged in.</p>;

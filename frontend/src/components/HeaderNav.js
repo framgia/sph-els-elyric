@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { useNavbar } from "../hooks/useNavbar";
 import UserLogout from "./userLogout";
 import AdminLogout from "./LogoutAdmin";
-import useIsAdmin from "../hooks/useIsAdmin";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function HeaderNav() {
-    const isAdmin = useIsAdmin();
+    const { IsAdmin } = useLocalStorage();
     const { currentRoute, navigateTo } = useNavbar();
 
     const inActiveClass =
@@ -52,8 +52,8 @@ export default function HeaderNav() {
                 >
                     Signup
                 </Link>
-                {!isAdmin && <UserLogout inActiveClass={inActiveClass} />}
-                {isAdmin && <AdminLogout inActiveClass={inActiveClass} />}
+                {!IsAdmin && <UserLogout inActiveClass={inActiveClass} />}
+                {IsAdmin && <AdminLogout inActiveClass={inActiveClass} />}
             </div>
         </div>
     );

@@ -1,10 +1,10 @@
 import { Outlet, Navigate } from "react-router-dom";
-import useIsAdmin from "../hooks/useIsAdmin";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const ProtectedAdminRoutes = () => {
-    let AdminIsLoggedIn = useIsAdmin();
+    let { IsAdmin } = useLocalStorage();
 
-    return AdminIsLoggedIn ? <Outlet /> : <Navigate to="/admin/login" />;
+    return IsAdmin ? <Outlet /> : <Navigate to="/admin/login" />;
 };
 
 export default ProtectedAdminRoutes;
