@@ -20,17 +20,32 @@ export default function HeaderNav() {
             </Link>
 
             <div className="flex gap-5 ml-auto">
-                <Link
-                    to="/categories"
-                    className={
-                        currentRoute === "categories"
-                            ? activeClass
-                            : inActiveClass
-                    }
-                    onClick={() => navigateTo("categories")}
-                >
-                    Categories
-                </Link>
+                {!isAdmin && (
+                    <Link
+                        to="/categories"
+                        className={
+                            currentRoute === "categories"
+                                ? activeClass
+                                : inActiveClass
+                        }
+                        onClick={() => navigateTo("categories")}
+                    >
+                        Categories
+                    </Link>
+                )}
+                {isAdmin && (
+                    <Link
+                        to="/admin/categories"
+                        className={
+                            currentRoute === "/admin/categories"
+                                ? activeClass
+                                : inActiveClass
+                        }
+                        onClick={() => navigateTo("categories")}
+                    >
+                        Categories
+                    </Link>
+                )}
                 <Link
                     to="/login"
                     className={
