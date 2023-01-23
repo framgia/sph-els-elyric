@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import useUserAuth from "../hooks/useIsUser";
+import useUserAuth from "../hooks/useLocalStorage";
 
 const ProtectedUserRoutes = () => {
     const UserIsLoggedIn = useUserAuth();

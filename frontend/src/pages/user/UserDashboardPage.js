@@ -1,9 +1,9 @@
-import useUserAuth from "../../hooks/useIsUser";
+import useUserAuth from "../../hooks/useLocalStorage";
 
 export default function UserDashboard() {
-    const userIsLoggedIn = useUserAuth();
+    const { IsUser } = useUserAuth();
 
-    if (userIsLoggedIn) {
+    if (IsUser) {
         return <p>Welcome USER! You are logged in.</p>;
     }
     return <p>You are not logged in.</p>;
