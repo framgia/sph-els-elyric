@@ -12,30 +12,24 @@ class CategoryController extends Controller
 		$categories = Category::all();
 		return $categories;
 	}
-    public function getCategoryDetails($categoryID)
+    public function getCategoryDetails($categoryId)
 	{
-		$category = Category::where('id', $categoryID)->first();
-		if($category){
-			$data = $category;
-		}else{
-			return "Can't find id";
-		}
-		return $data;
+		return Category::findOrFail($categoryId);
 	}
 
-	public function updateCategoryDetails(Request $request, $category_id)
+	public function updateCategoryDetails(Request $request, $categoryId)
 	{
-		$category = Category::where('id', $category_id)->first();
+		$category = Category::where('id', $categoryId)->first();
 	
-		if (!$request->has('title') || !$request->has('description')) {
-			return response()->json([
-				'error' => 'Both title and description are required'
-			], 400);
-		}
+		$request->validate([
+			'title' => 'required|string',
+			'description'=>'required|string'
+		]);
 	
-		$category->title = $request->input('title');
-		$category->description = $request->input('description');
-		$category->save();
+		Category::whereId($categoryId)->update([
+			'title'=>$request->title,
+			'description'=>$request->description
+		]);
 	
 		return response()->json([
 			'message' => 'Successfully Updated!',

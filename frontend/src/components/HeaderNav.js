@@ -50,62 +50,6 @@ export default function HeaderNav() {
             >
               Signin
             </Link>
-<<<<<<< Updated upstream
-
-            <div className="flex gap-5 ml-auto">
-                {!isAdmin && (
-                    <Link
-                        to="/categories"
-                        className={
-                            currentRoute === "categories"
-                                ? activeClass
-                                : inActiveClass
-                        }
-                        onClick={() => navigateTo("categories")}
-                    >
-                        Categories
-                    </Link>
-                )}
-                {isAdmin && (
-                    <Link
-                        to="/admin/categories"
-                        className={
-                            currentRoute === "/admin/categories"
-                                ? activeClass
-                                : inActiveClass
-                        }
-                        onClick={() => navigateTo("categories")}
-                    >
-                        Categories
-                    </Link>
-                )}
-                <Link
-                    to="/login"
-                    className={
-                        currentRoute === "login" ? activeClass : inActiveClass
-                    }
-                    onClick={() => navigateTo("login")}
-                >
-                    Signin
-                </Link>
-
-                <Link
-                    to="/register"
-                    className={
-                        currentRoute === "register"
-                            ? activeClass
-                            : inActiveClass
-                    }
-                    onClick={() => navigateTo("register")}
-                >
-                    Signup
-                </Link>
-                {!IsAdmin && <UserLogout inActiveClass={inActiveClass} />}
-                {IsAdmin && <AdminLogout inActiveClass={inActiveClass} />}
-            </div>
-        </div>
-    );
-=======
             <Link
               to="/register"
               className={
@@ -122,5 +66,4 @@ export default function HeaderNav() {
       </div>
     </div>
   );
->>>>>>> Stashed changes
 }

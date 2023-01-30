@@ -26,11 +26,11 @@ Route::post('admin/login', [AdminController::class, 'login']);
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
 	Route::get('logout', [AdminController::class, 'logout']);
 	Route::get('categories', [CategoryController::class, 'index']);
-	Route::get('category/{categoryID}', [CategoryController::class, 'getCategoryDetails']);
+	Route::get('category/{categoryId}', [CategoryController::class, 'getCategoryDetails']);
 	Route::post('categories/add', [CategoryController::class, 'store']);
 	Route::get('categories/questions', [CategoryController::class, 'categoryQuestions']);
-	Route::put('categories/{categoryID}/edit', [CategoryController::class, 'updateCategoryDetails']);
-	Route::post('categories/{categoryID}/question/add', [QuestionController::class, 'addQuestionWithChoicesAndAnswer']);
+	Route::put('categories/{categoryId}/edit', [CategoryController::class, 'updateCategoryDetails']);
+	Route::post('categories/{categoryId}/question/add', [QuestionController::class, 'addQuestionWithChoicesAndAnswer']);
 });
  
 // USER ROUTE
