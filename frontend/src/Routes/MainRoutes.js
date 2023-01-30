@@ -8,8 +8,8 @@ import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage";
 import AdminAddWordPage from "../pages/admin/AdminAddWordPage";
 import AdminAddCategoryPage from "../pages/admin/AdminAddCategoryPage";
-import ProtectedUserRoutes from "../Routes/ProtectedUserRoutes";
-import ProtectedAdminRoutes from "../Routes/ProtectedAdminRoutes";
+import ProtectedUserRoutes from "./ProtectedUserRoutes";
+import ProtectedAdminRoutes from "./ProtectedAdminRoutes";
 
 export default function MainRoutes() {
   return (
