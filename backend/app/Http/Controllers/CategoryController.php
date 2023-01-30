@@ -19,8 +19,6 @@ class CategoryController extends Controller
 
 	public function updateCategoryDetails(Request $request, $categoryId)
 	{
-		$category = Category::where('id', $categoryId)->first();
-	
 		$request->validate([
 			'title' => 'required|string',
 			'description'=>'required|string'
@@ -38,7 +36,11 @@ class CategoryController extends Controller
 
     public function categoryQuestions()
 	{
-		$categories = Category::with(['questions', 'questions.choices', 'questions.choices.answer'])->get();
+		$categories = Category::with([
+			'questions', 
+			'questions.choices', 
+			'questions.choices.answer'
+		])->get();
     	return $categories;
 	}
 	
