@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,12 @@ Route::post('admin/login', [AdminController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
 	Route::get('logout', [AdminController::class, 'logout']);
+	Route::get('categories', [CategoryController::class, 'index']);
+	Route::get('category/{categoryId}', [CategoryController::class, 'getCategoryDetails']);
+	Route::post('categories/add', [CategoryController::class, 'store']);
+	Route::get('categories/questions', [CategoryController::class, 'categoryQuestions']);
+	Route::put('categories/{categoryId}/edit', [CategoryController::class, 'updateCategoryDetails']);
+	Route::post('categories/{categoryId}/question/add', [QuestionController::class, 'addQuestionWithChoicesAndAnswer']);
 });
  
 // USER ROUTE
