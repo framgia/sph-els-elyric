@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import UserRegistrationPage from "../pages/user/UserRegistrationPage";
-import CategoriesPage from "../pages/CategoriesPage";
+import UserCategoriesPage from "../pages/user/UserCategoriesPage";
 import UserLoginPage from "../pages/user/UserLoginPage";
 import UserDashboardPage from "../pages/user/UserDashboardPage";
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
@@ -36,7 +36,7 @@ export default function MainRoutes() {
         {/* PROTECTED USER ROUTES  */}
         <Route element={<ProtectedUserRoutes />}>
           <Route path="/dashboard" element={<UserDashboardPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/categories" element={<UserCategoriesPage />} />
         </Route>
         {/* <Route path="*" element={<Navigate to={"/login"} />} /> */}
       </Routes>
