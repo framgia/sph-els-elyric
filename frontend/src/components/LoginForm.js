@@ -1,23 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useToast } from "../../hooks/useToast";
-import { loginAdmin } from "../../api/api";
+import { useToast } from "../hooks/useToast";
+import { loginUser } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
-export default function AdminLoginForm() {
+export default function UserLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const handleAdminLogin = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await loginAdmin(email, password);
-      console.log(response);
-      localStorage.setItem("admin_token", response.token);
-      localStorage.setItem("isAdmin", true);
+      const response = await loginUser(email, password);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("isAdmin", false);
       showToast("success", response.message);
       navigate(response.redirect);
     } catch (e) {
@@ -27,13 +26,13 @@ export default function AdminLoginForm() {
 
   return (
     <form
-      onSubmit={handleAdminLogin}
+      onSubmit={handleLogin}
       autoComplete="off"
       className="w-full max-w-[450px] px-10 py-16 bg-white border border-gray-100 rounded-lg shadow-lg"
       aria-label="signup-form"
     >
       <h2 className="mb-10 text-3xl font-bold text-center">
-        Login Admin Account
+        Login User Account
       </h2>
 
       <div className="flex flex-col items-start mb-5 gap-y-3">
@@ -70,13 +69,13 @@ export default function AdminLoginForm() {
         Login
       </button>
       <div className="flex items-center justify-center mt-5 text-slate-400">
-        <p>Need an Admin account? &nbsp;</p>
+        <p>Doesn't have an account? &nbsp;</p>
         <Link
-          to="/developer"
+          to="/register"
           className="text-blue-500 underline"
           aria-current="page"
         >
-          Contact Developer
+          Sign Up
         </Link>
       </div>
     </form>

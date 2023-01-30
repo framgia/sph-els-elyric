@@ -26,7 +26,7 @@ class AdminController extends Controller
 			$token = $user->createToken('MyApp', ['admin'])->plainTextToken;
 			return response()->json([
 				'message' => 'Admin Successfully Authenticated!',
-				'token' => $token,
+				'admin_token' => $token,
 				'redirect' => '/admin/dashboard'
 			]);
 		}
