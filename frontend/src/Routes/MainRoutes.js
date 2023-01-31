@@ -34,6 +34,10 @@ export default function MainRoutes() {
             path="/admin/categories/:categoryID/question/add"
             element={<AdminAddWordPage />}
           />
+          <Route
+            path="/admin/categories/:categoryID/edit"
+            element={<AdminCategoriesPage />}
+          />
         </Route>
 
         {/* PROTECTED USER ROUTES  */}
