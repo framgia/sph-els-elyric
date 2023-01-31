@@ -40,6 +40,15 @@ export async function checkAuthUser() {
   return response;
 }
 
+export async function getUserCategories() {
+  try {
+    const response = await userInstance.get("/categories");
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
+}
+
 // ADMIN API
 
 export async function loginAdmin(email, password) {
