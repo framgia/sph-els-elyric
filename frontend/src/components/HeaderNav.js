@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useNavbar } from "../hooks/useNavbar";
 import UserLogout from "./userLogout";
-import AdminLogout from "./adminLogout";
+import AdminLogout from "./LogoutAdmin";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function HeaderNav() {
