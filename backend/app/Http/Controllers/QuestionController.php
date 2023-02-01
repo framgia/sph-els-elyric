@@ -10,12 +10,7 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    public function index()
-	{
-		$questions = Question::with('choices')->get();
-		return $questions;
-	}
-    public function addQuestionWithChoicesAndAnswer(Request $request, $categoryId)
+	public function store(Request $request, $categoryId)
 	{
 		$category = Category::findOrFail($categoryId);
 
@@ -43,6 +38,4 @@ class QuestionController extends Controller
 	        'message' => 'Question, choices and answer added successfully.'
 	    ], 201);
 	}
-
-	
 }

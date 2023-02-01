@@ -31,11 +31,11 @@ export default function MainRoutes() {
             element={<AdminAddCategoryPage />}
           />
           <Route
-            path="/admin/categories/:categoryID/question/add"
+            path="/admin/categories/:categoryId/add"
             element={<AdminAddWordPage />}
           />
           <Route
-            path="/admin/categories/:categoryID/edit"
+            path="/admin/categories/:categoryId/edit"
             element={<AdminCategoriesPage />}
           />
         </Route>

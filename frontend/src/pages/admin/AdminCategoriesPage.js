@@ -20,7 +20,7 @@ export default function AdminCategoriesPage() {
   const [isDeleted, setIsDeleted] = useState(false);
   const [description, setDescription] = useState("New Description");
   const { showToast } = useToast();
-  const { categoryID } = useParams();
+  const { categoryId } = useParams();
 
   useEffect(() => {
     getCategories().then((category) => {
@@ -92,7 +92,7 @@ export default function AdminCategoriesPage() {
       title,
       description,
     };
-    const response = await updateCategoryData(categoryID, data);
+    const response = await updateCategoryData(categoryId, data);
     setShowEdit(false);
     showToast("success", response.message);
   };
@@ -136,7 +136,7 @@ export default function AdminCategoriesPage() {
                         <td className={tableData}>
                           <div className="flex gap-3">
                             <Link
-                              to={`/admin/categories/${category.id}/question/add`}
+                              to={`/admin/categories/${category.id}/add`}
                               className={addWordClass}
                             >
                               Add Word
