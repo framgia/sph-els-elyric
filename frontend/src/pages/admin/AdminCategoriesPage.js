@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getCategories, updateCategoryData } from "../../api/api";
+import {
+  getCategories,
+  updateCategoryData,
+  deleteCategory,
+} from "../../api/api";
 import _ from "lodash";
 import { useToast } from "../../hooks/useToast";
 import { useParams } from "react-router-dom";
@@ -13,6 +17,7 @@ export default function AdminCategoriesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showEdit, setShowEdit] = useState(false);
   const [title, setTitle] = useState("New Title");
+  const [isDeleted, setIsDeleted] = useState(false);
   const [description, setDescription] = useState("New Description");
   const { showToast } = useToast();
   const { categoryID } = useParams();
@@ -22,7 +27,9 @@ export default function AdminCategoriesPage() {
       setCategories(category);
       setPaginatedCategories(_(category).slice(0).take(pageSize).value());
     });
-  }, []);
+
+    setIsDeleted(false);
+  }, [isDeleted]);
 
   const pageCount = categories ? Math.ceil(categories.length / pageSize) : 0;
   if (pageCount === 1) return null;
@@ -79,6 +86,7 @@ export default function AdminCategoriesPage() {
   const handleEdit = (e) => {
     setShowEdit(true);
   };
+
   const handleUpdate = async () => {
     const data = {
       title,
@@ -88,6 +96,7 @@ export default function AdminCategoriesPage() {
     setShowEdit(false);
     showToast("success", response.message);
   };
+
   return (
     <div className="relative">
       <div className="w-full grid place-items-center">
@@ -140,7 +149,19 @@ export default function AdminCategoriesPage() {
                             >
                               Edit
                             </Link>
-                            <Link className={deleteClass}>Delete</Link>
+                            <Link
+                              onClick={async () => {
+                                const response = await deleteCategory(
+                                  category.id
+                                );
+                                setIsDeleted(true);
+
+                                showToast("warning", response.message);
+                              }}
+                              className={deleteClass}
+                            >
+                              Delete
+                            </Link>
                           </div>
                         </td>
                       </tr>

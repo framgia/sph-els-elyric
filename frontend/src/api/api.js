@@ -107,3 +107,11 @@ export async function addQuestionToCategory(categoryID, data) {
     throw error.response.data.error;
   }
 }
+
+export async function deleteCategory(categoryID) {
+  const response = await adminInstance.delete(
+    `categories/${categoryID}/delete`
+  );
+
+  return response.data;
+}

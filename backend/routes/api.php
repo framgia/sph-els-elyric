@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(f
 	Route::post('categories/add', [CategoryController::class, 'store']);
 	Route::get('categories/questions', [CategoryController::class, 'categoryQuestions']);
 	Route::put('categories/{categoryId}/edit', [CategoryController::class, 'updateCategoryDetails']);
+	Route::delete('categories/{categoryId}/delete', [CategoryController::class, 'deleteCategory']);
 	Route::post('categories/{categoryId}/question/add', [QuestionController::class, 'addQuestionWithChoicesAndAnswer']);
 });
  
