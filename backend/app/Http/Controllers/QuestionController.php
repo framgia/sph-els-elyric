@@ -15,15 +15,9 @@ class QuestionController extends Controller
 		$questions = Question::with('choices')->get();
 		return $questions;
 	}
-    public function addQuestionWithChoicesAndAnswer(Request $request, $categoryID)
+    public function addQuestionWithChoicesAndAnswer(Request $request, $categoryId)
 	{
-		$category = Category::where('id', $categoryID)->first();
-
-		if (!$category) {
-			return response()->json([
-				'error' => 'Category not found.'
-			], 404);
-		}
+		$category = Category::findOrFail($categoryId);
 
 	    $question = new Question();
 	    $question->category_id = $category->id;

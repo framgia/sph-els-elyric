@@ -15,15 +15,13 @@ return new class extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('choice_id')->unsigned();
-			$table->string('answer');
-			$table->boolean('is_correct');
+            $table->foreignId('choice_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->string('answer');
+            $table->boolean('is_correct');
             $table->timestamps();
-
-            $table->foreign('choice_id')
-                ->references('id')
-                ->on('choices')
-                ->onDelete('cascade');
         });
     }
 
