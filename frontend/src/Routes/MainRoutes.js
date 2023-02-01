@@ -30,7 +30,10 @@ export default function MainRoutes() {
             path="/admin/categories/add"
             element={<AdminAddCategoryPage />}
           />
-          <Route path="/admin/words/add" element={<AdminAddWordPage />} />
+          <Route
+            path="/admin/categories/:categoryID/question/add"
+            element={<AdminAddWordPage />}
+          />
         </Route>
 
         {/* PROTECTED USER ROUTES  */}
