@@ -17,27 +17,29 @@ use App\Http\Controllers\QuestionController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 // ADMIN ROUTE
 Route::post('admin/login', [AdminController::class, 'login']);
 
+// Admin resource controller routes
 Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
+    Route::resource('categories', CategoryController::class)->names([
+        'index' => 'admin.categories.index',
+        'show' => 'admin.categories.show',
+    ]);
+
+	Route::post('questions/{categoryId}', [QuestionController::class, 'store']);
 	Route::get('logout', [AdminController::class, 'logout']);
-	Route::get('categories', [CategoryController::class, 'index']);
-	Route::get('category/{categoryId}', [CategoryController::class, 'getCategoryDetails']);
-	Route::post('categories/add', [CategoryController::class, 'store']);
-	Route::get('categories/questions', [CategoryController::class, 'categoryQuestions']);
-	Route::put('categories/{categoryId}/edit', [CategoryController::class, 'updateCategoryDetails']);
-	Route::post('categories/{categoryId}/question/add', [QuestionController::class, 'addQuestionWithChoicesAndAnswer']);
 });
- 
+
+
 // USER ROUTE
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
+// User resource controller routes
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
-	Route::get('logout', [UserController::class, 'logout']);
+    Route::resource('categories', CategoryController::class, ['only' => ['index', 'show']]);
+
+    Route::get('logout', [UserController::class, 'logout']);
 });

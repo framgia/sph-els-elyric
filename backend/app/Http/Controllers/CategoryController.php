@@ -9,17 +9,42 @@ class CategoryController extends Controller
 {
     public function index()
 	{
-		$categories = Category::all();
-		return $categories;
-	}
-    public function getCategoryDetails($categoryId)
-	{
-		return Category::findOrFail($categoryId);
+		return Category::with([
+			'questions', 
+			'questions.choices', 
+			'questions.choices.answer'
+		])->get();
 	}
 
-	public function updateCategoryDetails(Request $request, $categoryId)
+
+	public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+			'title' => 'required|string',
+			'description' => 'required|string'
+		]);
+		
+		Category::create($validatedData);
+	
+		return response()->json([
+			'message' => 'Category Successfully Added!'
+		], 201);
+    }
+
+
+	public function show($categoryId)
 	{
-		$request->validate([
+		return Category::with([
+			'questions',
+			'questions.choices',
+			'questions.choices.answer'
+		])->findOrFail($categoryId);
+	}
+
+
+	public function update(Request $request, $categoryId)
+    {
+        $request->validate([
 			'title' => 'required|string',
 			'description'=>'required|string'
 		]);
@@ -32,33 +57,13 @@ class CategoryController extends Controller
 		return response()->json([
 			'message' => 'Successfully Updated!',
 		], 200);
-	}
+    }
 
-    public function categoryQuestions()
-	{
-		$categories = Category::with([
-			'questions', 
-			'questions.choices', 
-			'questions.choices.answer'
-		])->get();
-    	return $categories;
-	}
-	
-	public function store(Request $request)
-	{
-		$request->validate([
-			'title' => 'required|string',
-			'description' => 'required|string'
-		]);
 
-		$category = new Category();
-		$category->title = $request->title;
-		$category->description = $request->description;
-		$category->save();
+	public function destroy($categoryId)
+    {
+        Category::whereId($categoryId)->delete();
 
-		return response()->json([
-			'message' => 'Category Successfully Added!'
-		], 201);
-
-	}
+		return response()->json(['message' => 'Deleted Successfully!']);
+    }
 }

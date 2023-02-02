@@ -14,11 +14,11 @@ export default function AdminAddWordPage() {
   const [categoryName, setCategoryName] = useState([]);
   const { showToast } = useToast();
 
-  const { categoryID } = useParams();
+  const { categoryId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getCategoryData(categoryID);
+      const data = await getCategoryData(categoryId);
       setCategoryName(data);
     };
 
@@ -44,7 +44,7 @@ export default function AdminAddWordPage() {
       },
     };
 
-    const response = await addQuestionToCategory(categoryID, data);
+    const response = await addQuestionToCategory(categoryId, data);
 
     setWord("");
     setAnswer("");

@@ -61,7 +61,7 @@ export async function adminLogout() {
   }
 }
 export async function addCategory(title, description) {
-  const response = await adminInstance.post("/categories/add", {
+  const response = await adminInstance.post("/categories", {
     title,
     description,
   });
@@ -77,33 +77,33 @@ export async function getCategories() {
     throw error.response.data.error;
   }
 }
-export async function getCategoryData(categoryID) {
+export async function getCategoryData(categoryId) {
   try {
-    const response = await adminInstance.get(`category/${categoryID}`);
+    const response = await adminInstance.get(`categories/${categoryId}`);
     return response.data;
   } catch (error) {
     throw error.response.data.error;
   }
 }
-export async function updateCategoryData(categoryID, data) {
+export async function updateCategoryData(categoryId, data) {
   try {
-    const response = await adminInstance.put(
-      `categories/${categoryID}/edit`,
-      data
-    );
+    const response = await adminInstance.put(`categories/${categoryId}`, data);
     return response.data;
   } catch (error) {
     throw error.response.data.error;
   }
 }
-export async function addQuestionToCategory(categoryID, data) {
+export async function addQuestionToCategory(categoryId, data) {
   try {
-    const response = await adminInstance.post(
-      `categories/${categoryID}/question/add`,
-      data
-    );
+    const response = await adminInstance.post(`questions/${categoryId}/`, data);
     return response.data;
   } catch (error) {
     throw error.response.data.error;
   }
+}
+
+export async function deleteCategory(categoryId) {
+  const response = await adminInstance.delete(`categories/${categoryId}`);
+
+  return response.data;
 }

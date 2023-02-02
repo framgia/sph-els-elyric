@@ -12,8 +12,8 @@ class Category extends Model
 
 	protected $fillable = ['title', 'description'];
 
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
+	public function questions()
+	{
+		return $this->hasMany(Question::class);
+	}
 }
