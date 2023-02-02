@@ -10,7 +10,6 @@ export default function UserCategoriesPage() {
       const response = await getUserCategories();
       setCategories(response);
     };
-
     fetch();
   }, []);
 
@@ -25,7 +24,7 @@ export default function UserCategoriesPage() {
             <div className="grid lg:gap-1 w-full sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center">
               {categories.map((category, index) => (
                 <div
-                  className="bg-gray-100  sm:max-w-[500px] md:max-w-[400px] lg:max-w-[500px]  p-5 m-5 border border-gray-400 rounded-lg shadow-lg"
+                  className="bg-gray-100 sm:max-w-[500px] md:max-w-[400px] lg:max-w-[500px] p-5 m-5 border border-gray-400 rounded-lg shadow-lg"
                   key={index}
                 >
                   <h3 className="text-xl font-semibold">{category.title}</h3>
