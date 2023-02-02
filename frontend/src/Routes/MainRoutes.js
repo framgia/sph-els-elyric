@@ -3,6 +3,7 @@ import UserRegistrationPage from "../pages/user/UserRegistrationPage";
 import UserCategoriesPage from "../pages/user/UserCategoriesPage";
 import UserLoginPage from "../pages/user/UserLoginPage";
 import UserDashboardPage from "../pages/user/UserDashboardPage";
+import UserAnswerPage from "../pages/user/UserAnswerPage";
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage";
@@ -44,6 +45,10 @@ export default function MainRoutes() {
         <Route element={<ProtectedUserRoutes />}>
           <Route path="/dashboard" element={<UserDashboardPage />} />
           <Route path="/categories" element={<UserCategoriesPage />} />
+          <Route
+            path="/categories/:categoryId/answer"
+            element={<UserAnswerPage />}
+          />
         </Route>
         {/* <Route path="*" element={<Navigate to={"/login"} />} /> */}
       </Routes>
