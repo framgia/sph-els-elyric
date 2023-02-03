@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getUserData } from "../../api/api";
+import { getUserCategory } from "../../api/api";
 
 export default function UserAnswerPage() {
-  const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState([]);
+  const [category, setCategory] = useState({});
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,31 +12,33 @@ export default function UserAnswerPage() {
 
   useEffect(() => {
     const fetch = async () => {
-      const response = await getUserData(categoryId);
-      setTitle(response.title);
-      setQuestions(response.questions);
+      const response = await getUserCategory(categoryId);
+      setCategory(response);
     };
 
     fetch();
   }, []);
 
+  const questions = category.questions;
   const buttonClass =
     "bg-blue-400 py-4 border hover:border-2 rounded-xl text-white text-xl shadow-xl";
 
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questions.slice(
-    indexOfFirstQuestion,
-    indexOfLastQuestion
-  );
-  const lastPage = questions.length + 1;
+  const currentQuestions =
+    questions && Array.isArray(questions)
+      ? questions.slice(indexOfFirstQuestion, indexOfLastQuestion)
+      : [];
+
+  const lastPage =
+    questions && Array.isArray(questions) ? questions.length + 1 : 0;
 
   const renderQuestions = currentQuestions.map((question, index) => {
     return (
       <div key={question.id} className="flex justify-center">
         <div className="w-full md:max-w-[1240px] grid md:mx-5 mt-20 bg-gray-200 border border-blue-500 rounded-xl shadow-xl">
           <div className="grid gap-2 place-items-center bg-gradient-to-b from-[#617EFF] to-[#34B3F9] py-5 rounded-t-xl">
-            <h1 className="text-white text-2xl font-bold">{title}</h1>
+            <h1 className="text-white text-2xl font-bold">{category.title}</h1>
             <p className="text-white text-lg font-semibold">
               Select one of the best answer:
             </p>

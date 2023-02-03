@@ -48,7 +48,7 @@ export async function getUserCategories() {
     throw error.response.data.error;
   }
 }
-export async function getUserData(categoryId) {
+export async function getUserCategory(categoryId) {
   try {
     const response = await userInstance.get(`/categories/${categoryId}`);
     return response.data;
