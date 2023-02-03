@@ -19,6 +19,12 @@ export default function UserAnswerPage() {
     fetch();
   }, []);
 
+  const handleAnswer = (question, answer) => {
+    setCurrentPage(currentPage + 1);
+    setAnswers(answers.concat([answer]));
+    return question.answer?.answer === answer ? setScore(score + 1) : "Wrong";
+  };
+
   const questions = category.questions;
   const buttonClass =
     "bg-blue-400 py-4 border hover:border-2 rounded-xl text-white text-xl shadow-xl";
@@ -56,49 +62,25 @@ export default function UserAnswerPage() {
             {question.choices.map((choice, index) => (
               <div key={index} className="flex-1 grid gap-5">
                 <button
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                    setAnswers(answers.concat([choice.choiceA]));
-                    return choice.answer.answer === choice.choiceA
-                      ? setScore(score + 1)
-                      : "Wrong";
-                  }}
+                  onClick={() => handleAnswer(question, choice.choiceA)}
                   className={buttonClass}
                 >
                   {choice.choiceA}
                 </button>
                 <button
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                    setAnswers(answers.concat([choice.choiceB]));
-                    return choice.answer.answer === choice.choiceB
-                      ? setScore(score + 1)
-                      : "Wrong";
-                  }}
+                  onClick={() => handleAnswer(question, choice.choiceB)}
                   className={buttonClass}
                 >
                   {choice.choiceB}
                 </button>
                 <button
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                    setAnswers(answers.concat([choice.choiceC]));
-                    return choice.answer.answer === choice.choiceC
-                      ? setScore(score + 1)
-                      : "Wrong";
-                  }}
+                  onClick={() => handleAnswer(question, choice.choiceC)}
                   className={buttonClass}
                 >
                   {choice.choiceC}
                 </button>
                 <button
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                    setAnswers(answers.concat([choice.choiceD]));
-                    return choice.answer.answer === choice.choiceD
-                      ? setScore(score + 1)
-                      : "Wrong";
-                  }}
+                  onClick={() => handleAnswer(question, choice.choiceD)}
                   className={buttonClass}
                 >
                   {choice.choiceD}
