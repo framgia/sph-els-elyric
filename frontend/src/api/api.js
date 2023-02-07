@@ -48,6 +48,7 @@ export async function getUserCategories() {
     throw error.response.data.error;
   }
 }
+
 export async function getUserCategory(categoryId) {
   try {
     const response = await userInstance.get(`/categories/${categoryId}`);
@@ -57,6 +58,11 @@ export async function getUserCategory(categoryId) {
   }
 }
 
+export async function calculateScore(data) {
+  const response = await userInstance.post("/totalscore", data);
+
+  return response.data;
+}
 // ADMIN API
 
 export async function loginAdmin(email, password) {

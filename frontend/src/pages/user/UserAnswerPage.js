@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getUserCategory } from "../../api/api";
+import { getUserCategory, calculateScore } from "../../api/api";
+import UserAnswerResultPage from "../user/UserAnswerResultPage";
 
 export default function UserAnswerPage() {
   const [category, setCategory] = useState({});
   const [score, setScore] = useState(0);
+  const [scorePercentage, setScorePercentage] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [isCorrect, setIsCorrect] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(1);
+  const [passed, setPassed] = useState(null);
+  const [isDone, setIsDone] = useState(false);
+
   const { categoryId } = useParams();
 
   useEffect(() => {
@@ -17,15 +24,10 @@ export default function UserAnswerPage() {
     };
 
     fetch();
-  }, []);
-
-  const handleAnswer = (question, answer) => {
-    setCurrentPage(currentPage + 1);
-    setAnswers(answers.concat([answer]));
-    return question.answer?.answer === answer ? setScore(score + 1) : "Wrong";
-  };
+  }, [categoryId]);
 
   const questions = category.questions;
+  const title = category.title;
   const buttonClass =
     "bg-blue-400 py-4 border hover:border-2 rounded-xl text-white text-xl shadow-xl";
 
@@ -39,13 +41,48 @@ export default function UserAnswerPage() {
   const lastPage =
     questions && Array.isArray(questions) ? questions.length + 1 : 0;
 
+  const totalQuestion =
+    questions && Array.isArray(questions) ? questions.length : 0;
+  const passingScore = 75;
+
+  useEffect(() => {
+    setPassed(scorePercentage >= passingScore ? true : false);
+  }, [scorePercentage]);
+
+  useEffect(() => {
+    const calculate = async () => {
+      try {
+        const result = await calculateScore({
+          score,
+          totalQuestion,
+          answers,
+          correctAnswers,
+        });
+        setScorePercentage(result.result);
+        setScore(result.score);
+        setIsCorrect(result.isCorrect);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    calculate();
+  }, [isDone]);
+
+  const handleAnswer = (answer, correctAnswer) => {
+    setCurrentPage(currentPage + 1);
+    setAnswers(answers.concat([answer]));
+    setCorrectAnswers(correctAnswers.concat([correctAnswer]));
+    if (currentPage === totalQuestion) {
+      setIsDone(true);
+    }
+  };
   const renderQuestions = currentQuestions.map((question, index) => {
     return (
-      <div key={question.id} className="flex justify-center">
+      <div key={index} className="flex justify-center">
         <div className="w-full md:max-w-[1240px] grid md:mx-5 mt-20 bg-gray-200 border border-blue-500 rounded-xl shadow-xl">
           <div className="grid gap-2 place-items-center bg-gradient-to-b from-[#617EFF] to-[#34B3F9] py-5 rounded-t-xl">
             <h1 className="text-white text-2xl font-bold">{category.title}</h1>
-            <p className="text-white text-lg font-semibold">
+            <p className="text-white tet-lg font-semibold">
               Select one of the best answer:
             </p>
           </div>
@@ -62,25 +99,33 @@ export default function UserAnswerPage() {
             {question.choices.map((choice, index) => (
               <div key={index} className="flex-1 grid gap-5">
                 <button
-                  onClick={() => handleAnswer(question, choice.choiceA)}
+                  onClick={() =>
+                    handleAnswer(choice.choiceA, choice.answer.answer)
+                  }
                   className={buttonClass}
                 >
                   {choice.choiceA}
                 </button>
                 <button
-                  onClick={() => handleAnswer(question, choice.choiceB)}
+                  onClick={() =>
+                    handleAnswer(choice.choiceB, choice.answer.answer)
+                  }
                   className={buttonClass}
                 >
                   {choice.choiceB}
                 </button>
                 <button
-                  onClick={() => handleAnswer(question, choice.choiceC)}
+                  onClick={() =>
+                    handleAnswer(choice.choiceC, choice.answer.answer)
+                  }
                   className={buttonClass}
                 >
                   {choice.choiceC}
                 </button>
                 <button
-                  onClick={() => handleAnswer(question, choice.choiceD)}
+                  onClick={() =>
+                    handleAnswer(choice.choiceD, choice.answer.answer)
+                  }
                   className={buttonClass}
                 >
                   {choice.choiceD}
@@ -93,18 +138,141 @@ export default function UserAnswerPage() {
     );
   });
 
-  const renderResult = () => {
-    return <div>Result Page</div>;
+  const renderPassedPopupResult = () => {
+    return (
+      <div className="w-screen grid place-items-center mt-20">
+        <div className="relative flex flex-col items-center gap-5 px-20 py-20 bg-gradient-to-b from-[#617EFF] to-[#34B3F9] border border-gray-400 rounded-2xl shadow-2xl">
+          <div
+            onClick={() => setPassed(null)}
+            className="absolute top-5 right-5"
+          >
+            <img
+              className="cursor-pointer"
+              src="https://cdn-icons-png.flaticon.com/512/992/992660.png"
+              width={50}
+              alt="close"
+            />
+          </div>
+          <div>
+            <img
+              src="https://cdn3d.iconscout.com/3d/premium/thumb/trophy-5498563-4577197.png"
+              width={200}
+              height={200}
+              alt="passed"
+            />
+          </div>
+          <h2 className="text-4xl font-bold text-white">Congratulations!</h2>
+          <h2 className="text-4xl font-bold text-green-700">
+            Passed! {`${scorePercentage}%`}
+          </h2>
+          <h3 className="text-2xl font-semibold text-white">
+            Quiz completed successfully.
+          </h3>
+          <div className="text-2xl font-semibold">
+            <p>
+              You attempt
+              <span className="text-blue-600 font-bold">
+                {" "}
+                {totalQuestion} questions{" "}
+              </span>
+              and
+            </p>
+            <p>
+              from that{" "}
+              <span className="text-green-700 font-bold">{score} answers </span>{" "}
+              are correct
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const renderFailedPopupResult = () => {
+    return (
+      <div
+        key={Math.random()}
+        className="w-screen grid place-items-center mt-20"
+      >
+        <div className="relative flex flex-col items-center gap-5 px-20 py-20 bg-gradient-to-b from-[#617EFF] to-[#34B3F9] border border-gray-400 rounded-2xl shadow-2xl">
+          <div
+            onClick={() => setPassed(null)}
+            className="absolute top-5 right-5"
+          >
+            <img
+              className="cursor-pointer"
+              src="https://cdn-icons-png.flaticon.com/512/992/992660.png"
+              width={50}
+              alt="close"
+            />
+          </div>
+          <div>
+            <img
+              src="https://cdn3d.iconscout.com/3d/free/thumb/sad-face-3750922-3144984.png"
+              width={200}
+              height={200}
+              alt="failed"
+            />
+          </div>
+          <h2 className="text-4xl font-bold text-white">Opps Sorry!</h2>
+          <h2 className="text-4xl font-bold text-red-700">
+            Failed! {`${scorePercentage}%`}
+          </h2>
+          <h3 className="text-2xl font-semibold text-white">
+            Quiz completed but Failed.
+          </h3>
+          <div className="text-2xl font-semibold">
+            <p>
+              You attempt
+              <span className="text-blue-600 font-bold">
+                {" "}
+                {totalQuestion} questions{" "}
+              </span>
+              and
+            </p>
+            <p>
+              from that{" "}
+              <span className="text-red-700 font-bold">{score} answers </span>{" "}
+              are correct
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div>
       {renderQuestions}
-      {currentPage === lastPage && renderResult()}
-      {!questions && (
-        <>
-          <div>Please Contact Administrator to create some questions.</div>
-        </>
+      {questions && Array.isArray(questions) ? (
+        questions.length > 0 ? (
+          currentPage === lastPage && (
+            <>
+              {passed && renderPassedPopupResult()}
+              {passed === false && renderFailedPopupResult()}
+              {passed === null && (
+                <>
+                  <UserAnswerResultPage
+                    title={title}
+                    score={score}
+                    totalQuestion={totalQuestion}
+                    questions={questions}
+                    answers={answers}
+                    isCorrect={isCorrect}
+                    correctAnswers={correctAnswers}
+                  />
+                </>
+              )}
+            </>
+          )
+        ) : (
+          <div className="grid place-items-center w-screen bg-red-100 shadow-lg">
+            <div className="text-3xl text-red-700 py-7">
+              Please Contact Administrator to create some questions.
+            </div>
+          </div>
+        )
+      ) : (
+        0
       )}
     </div>
   );
