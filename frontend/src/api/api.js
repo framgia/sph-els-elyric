@@ -58,6 +58,24 @@ export async function getUserCategory(categoryId) {
   }
 }
 
+export async function showLearnedWord(userId) {
+  const response = await userInstance.get(`learned-word/${userId}`);
+
+  return response.data;
+}
+
+export async function storeLearnedWord(data) {
+  const response = await userInstance.post("learned-word/", data);
+
+  return response.data;
+}
+
+export async function getUser() {
+  const response = await userInstance.get(`user`);
+
+  return response;
+}
+
 export async function calculateScore(data) {
   const response = await userInstance.post("/totalscore", data);
 

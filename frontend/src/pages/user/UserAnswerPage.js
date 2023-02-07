@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getUserCategory, calculateScore } from "../../api/api";
+import {
+  getUserCategory,
+  calculateScore,
+  storeLearnedWord,
+} from "../../api/api";
 import UserAnswerResultPage from "../user/UserAnswerResultPage";
 
 export default function UserAnswerPage() {
@@ -10,6 +14,11 @@ export default function UserAnswerPage() {
   const [answers, setAnswers] = useState([]);
   const [isCorrect, setIsCorrect] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [answersQuestion, setAnswersQuestion] = useState([]);
+  const [correctAnswersOnly, setCorrectAnswersOnly] = useState([]);
+  const [correctAnswerQuestionsOnly, setCorrectAnswerQuestionsOnly] = useState(
+    []
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(1);
   const [passed, setPassed] = useState(null);
@@ -47,6 +56,16 @@ export default function UserAnswerPage() {
 
   useEffect(() => {
     setPassed(scorePercentage >= passingScore ? true : false);
+    const store = async () => {
+      if (scorePercentage) {
+        await storeLearnedWord({
+          learned_from: category.title,
+          learned_word: correctAnswerQuestionsOnly,
+          learned_answer: correctAnswersOnly,
+        });
+      }
+    };
+    store();
   }, [scorePercentage]);
 
   useEffect(() => {
@@ -57,10 +76,13 @@ export default function UserAnswerPage() {
           totalQuestion,
           answers,
           correctAnswers,
+          answersQuestion,
         });
         setScorePercentage(result.result);
         setScore(result.score);
         setIsCorrect(result.isCorrect);
+        setCorrectAnswersOnly(result.correctAnswersOnly);
+        setCorrectAnswerQuestionsOnly(result.correctAnswerQuestionsOnly);
       } catch (error) {
         console.log(error);
       }
@@ -68,10 +90,14 @@ export default function UserAnswerPage() {
     calculate();
   }, [isDone]);
 
-  const handleAnswer = (answer, correctAnswer) => {
+  // console.log(correctAnswers);
+
+  const handleAnswer = (question, answer, correctAnswer) => {
     setCurrentPage(currentPage + 1);
     setAnswers(answers.concat([answer]));
     setCorrectAnswers(correctAnswers.concat([correctAnswer]));
+    setAnswersQuestion(answersQuestion.concat([question.question]));
+
     if (currentPage === totalQuestion) {
       setIsDone(true);
     }
@@ -100,7 +126,7 @@ export default function UserAnswerPage() {
               <div key={index} className="flex-1 grid gap-5">
                 <button
                   onClick={() =>
-                    handleAnswer(choice.choiceA, choice.answer.answer)
+                    handleAnswer(question, choice.choiceA, choice.answer.answer)
                   }
                   className={buttonClass}
                 >
@@ -108,7 +134,7 @@ export default function UserAnswerPage() {
                 </button>
                 <button
                   onClick={() =>
-                    handleAnswer(choice.choiceB, choice.answer.answer)
+                    handleAnswer(question, choice.choiceB, choice.answer.answer)
                   }
                   className={buttonClass}
                 >
@@ -116,7 +142,7 @@ export default function UserAnswerPage() {
                 </button>
                 <button
                   onClick={() =>
-                    handleAnswer(choice.choiceC, choice.answer.answer)
+                    handleAnswer(question, choice.choiceC, choice.answer.answer)
                   }
                   className={buttonClass}
                 >
@@ -124,7 +150,7 @@ export default function UserAnswerPage() {
                 </button>
                 <button
                   onClick={() =>
-                    handleAnswer(choice.choiceD, choice.answer.answer)
+                    handleAnswer(question, choice.choiceD, choice.answer.answer)
                   }
                   className={buttonClass}
                 >
