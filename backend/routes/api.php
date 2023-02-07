@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\LearnedWordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::post('login', [UserController::class, 'login']);
 // User resource controller routes
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::resource('categories', CategoryController::class, ['only' => ['index', 'show']]);
+    Route::resource('learned-word', LearnedWordController::class, ['only' => ['show', 'store']]);
 
     Route::get('logout', [UserController::class, 'logout']);
 });
