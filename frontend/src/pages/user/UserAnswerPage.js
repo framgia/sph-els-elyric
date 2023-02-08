@@ -99,6 +99,7 @@ export default function UserAnswerPage() {
       setIsDone(true);
     }
   };
+
   const renderQuestions = currentQuestions.map((question, index) => {
     return (
       <div key={index} className="flex justify-center">
