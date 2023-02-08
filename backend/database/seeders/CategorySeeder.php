@@ -12,6 +12,7 @@ class CategorySeeder extends Seeder
 		for($i=0;$i<20;$i++){
 			$title = "Lesson " . ($i + 1);
         	$description = "Description for " . $title;
+			$taken = 0;
 
         	Category::create([
             	'title' => $title,
