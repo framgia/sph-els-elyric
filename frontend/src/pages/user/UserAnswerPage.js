@@ -99,6 +99,7 @@ export default function UserAnswerPage() {
       setIsDone(true);
     }
   };
+
   const renderQuestions = currentQuestions.map((question, index) => {
     return (
       <div key={index} className="flex justify-center">
@@ -121,38 +122,20 @@ export default function UserAnswerPage() {
             </div>
             {question.choices.map((choice, index) => (
               <div key={index} className="flex-1 grid gap-5">
-                <button
-                  onClick={() =>
-                    handleAnswer(question, choice.choiceA, choice.answer.answer)
-                  }
-                  className={buttonClass}
-                >
-                  {choice.choiceA}
-                </button>
-                <button
-                  onClick={() =>
-                    handleAnswer(question, choice.choiceB, choice.answer.answer)
-                  }
-                  className={buttonClass}
-                >
-                  {choice.choiceB}
-                </button>
-                <button
-                  onClick={() =>
-                    handleAnswer(question, choice.choiceC, choice.answer.answer)
-                  }
-                  className={buttonClass}
-                >
-                  {choice.choiceC}
-                </button>
-                <button
-                  onClick={() =>
-                    handleAnswer(question, choice.choiceD, choice.answer.answer)
-                  }
-                  className={buttonClass}
-                >
-                  {choice.choiceD}
-                </button>
+                {["A", "B", "C", "D"].map((letter) => (
+                  <button
+                    onClick={() =>
+                      handleAnswer(
+                        question,
+                        choice[`choice${letter}`],
+                        choice.answer.answer
+                      )
+                    }
+                    className={buttonClass}
+                  >
+                    {choice[`choice${letter}`]}
+                  </button>
+                ))}
               </div>
             ))}
           </div>
