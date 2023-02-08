@@ -23,6 +23,7 @@ export default function UserAnswerPage() {
   const [questionsPerPage] = useState(1);
   const [passed, setPassed] = useState(null);
   const [isDone, setIsDone] = useState(false);
+  const [showPopupResult, setShowPopupResult] = useState(false);
 
   const { categoryId } = useParams();
 
@@ -52,10 +53,8 @@ export default function UserAnswerPage() {
 
   const totalQuestion =
     questions && Array.isArray(questions) ? questions.length : 0;
-  const passingScore = 75;
 
   useEffect(() => {
-    setPassed(scorePercentage >= passingScore ? true : false);
     const store = async () => {
       if (scorePercentage) {
         await storeLearnedWord({
@@ -71,26 +70,24 @@ export default function UserAnswerPage() {
   useEffect(() => {
     const calculate = async () => {
       try {
-        const result = await calculateScore({
-          score,
-          totalQuestion,
+        const response = await calculateScore({
           answers,
           correctAnswers,
           answersQuestion,
         });
-        setScorePercentage(result.result);
-        setScore(result.score);
-        setIsCorrect(result.isCorrect);
-        setCorrectAnswersOnly(result.correctAnswersOnly);
-        setCorrectAnswerQuestionsOnly(result.correctAnswerQuestionsOnly);
+        setScorePercentage(response.result);
+        setScore(response.score);
+        setIsCorrect(response.isCorrect);
+        setCorrectAnswersOnly(response.correctAnswersOnly);
+        setCorrectAnswerQuestionsOnly(response.correctAnswerQuestionsOnly);
+        setPassed(response.passed);
+        setShowPopupResult(true);
       } catch (error) {
         console.log(error);
       }
     };
     calculate();
   }, [isDone]);
-
-  // console.log(correctAnswers);
 
   const handleAnswer = (question, answer, correctAnswer) => {
     setCurrentPage(currentPage + 1);
@@ -164,35 +161,55 @@ export default function UserAnswerPage() {
     );
   });
 
-  const renderPassedPopupResult = () => {
+  const renderPopupResult = () => {
     return (
       <div className="w-screen grid place-items-center mt-20">
         <div className="relative flex flex-col items-center gap-5 px-20 py-20 bg-gradient-to-b from-[#617EFF] to-[#34B3F9] border border-gray-400 rounded-2xl shadow-2xl">
           <div
-            onClick={() => setPassed(null)}
+            onClick={() => setShowPopupResult(false)}
             className="absolute top-5 right-5"
           >
             <img
               className="cursor-pointer"
-              src="https://cdn-icons-png.flaticon.com/512/992/992660.png"
+              src={`${
+                passed
+                  ? "https://cdn-icons-png.flaticon.com/512/992/992660.png"
+                  : "https://cdn-icons-png.flaticon.com/512/992/992660.png"
+              }`}
               width={50}
               alt="close"
             />
           </div>
           <div>
             <img
-              src="https://cdn3d.iconscout.com/3d/premium/thumb/trophy-5498563-4577197.png"
+              src={`${
+                passed
+                  ? "https://cdn3d.iconscout.com/3d/premium/thumb/trophy-5498563-4577197.png"
+                  : "https://cdn3d.iconscout.com/3d/free/thumb/sad-face-3750922-3144984.png"
+              }`}
               width={200}
               height={200}
-              alt="passed"
+              alt={`${passed ? "passed" : "failed"}`}
             />
           </div>
-          <h2 className="text-4xl font-bold text-white">Congratulations!</h2>
-          <h2 className="text-4xl font-bold text-green-700">
-            Passed! {`${scorePercentage}%`}
+          <h2 className="text-4xl font-bold text-white">{`${
+            passed ? "Congratulation!" : "Oops Sorry!"
+          }`}</h2>
+          <h2
+            className={`${
+              passed
+                ? "text-4xl font-bold text-green-700"
+                : "text-4xl font-bold text-red-700"
+            }`}
+          >
+            {`${passed ? "Passed!" : "Failed!"}`} {`${scorePercentage}%`}
           </h2>
           <h3 className="text-2xl font-semibold text-white">
-            Quiz completed successfully.
+            {`${
+              passed
+                ? "Quiz completed successfully."
+                : "Quiz completed but Failed."
+            }`}
           </h3>
           <div className="text-2xl font-semibold">
             <p>
@@ -205,59 +222,13 @@ export default function UserAnswerPage() {
             </p>
             <p>
               from that{" "}
-              <span className="text-green-700 font-bold">{score} answers </span>{" "}
-              are correct
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-  const renderFailedPopupResult = () => {
-    return (
-      <div
-        key={Math.random()}
-        className="w-screen grid place-items-center mt-20"
-      >
-        <div className="relative flex flex-col items-center gap-5 px-20 py-20 bg-gradient-to-b from-[#617EFF] to-[#34B3F9] border border-gray-400 rounded-2xl shadow-2xl">
-          <div
-            onClick={() => setPassed(null)}
-            className="absolute top-5 right-5"
-          >
-            <img
-              className="cursor-pointer"
-              src="https://cdn-icons-png.flaticon.com/512/992/992660.png"
-              width={50}
-              alt="close"
-            />
-          </div>
-          <div>
-            <img
-              src="https://cdn3d.iconscout.com/3d/free/thumb/sad-face-3750922-3144984.png"
-              width={200}
-              height={200}
-              alt="failed"
-            />
-          </div>
-          <h2 className="text-4xl font-bold text-white">Opps Sorry!</h2>
-          <h2 className="text-4xl font-bold text-red-700">
-            Failed! {`${scorePercentage}%`}
-          </h2>
-          <h3 className="text-2xl font-semibold text-white">
-            Quiz completed but Failed.
-          </h3>
-          <div className="text-2xl font-semibold">
-            <p>
-              You attempt
-              <span className="text-blue-600 font-bold">
-                {" "}
-                {totalQuestion} questions{" "}
-              </span>
-              and
-            </p>
-            <p>
-              from that{" "}
-              <span className="text-red-700 font-bold">{score} answers </span>{" "}
+              <span
+                className={`${
+                  passed ? "text-green-700 font-bold" : "text-red-700 font-bold"
+                }`}
+              >
+                {score} answers{" "}
+              </span>{" "}
               are correct
             </p>
           </div>
@@ -273,9 +244,8 @@ export default function UserAnswerPage() {
         questions.length > 0 ? (
           currentPage === lastPage && (
             <>
-              {passed && renderPassedPopupResult()}
-              {passed === false && renderFailedPopupResult()}
-              {passed === null && (
+              {showPopupResult && renderPopupResult()}
+              {!showPopupResult && (
                 <>
                   <UserAnswerResultPage
                     title={title}
