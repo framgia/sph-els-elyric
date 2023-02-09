@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\Question;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasActivity;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, HasActivity;
 
 	protected $fillable = ['title', 'description'];
 
