@@ -18,7 +18,7 @@ export default function HeaderNav() {
       <Link to="/">
         <h1 className="text-2xl font-semibold">E-learning System</h1>
       </Link>
-      <div className="flex gap-5 ml-auto">
+      <div className="flex items-center gap-5 ml-auto">
         {!IsAdmin && (
           <Link
             to="/categories"
@@ -63,7 +63,17 @@ export default function HeaderNav() {
         )}
         {!IsAdmin && <UserLogout inActiveClass={inActiveClass} />}
         {IsAdmin && <AdminLogout inActiveClass={inActiveClass} />}
+        <div className="flex items-end justify-center w-20 h-20 bg-gray-200 border-2 border-blue-700 rounded-full overflow-hidden cursor-pointer">
+          <Link to="/dashboard">
+            <img
+              src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+              width={60}
+              height={60}
+            />
+          </Link>
+        </div>
       </div>
+      <div className=""></div>
     </div>
   );
 }
