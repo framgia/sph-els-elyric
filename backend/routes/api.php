@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\LearnedWordController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\FollowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,9 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
 
     Route::post('totalscore', [ScoreController::class, 'calculateScore']);
     Route::get('user', [UserController::class, 'userDetails']);
+
+    Route::post('follow/{user}', [FollowController::class, 'follow']);
+    Route::delete('unfollow/{user}', [FollowController::class, 'unfollow']);
 
     Route::get('logout', [UserController::class, 'logout']);
 });

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\LearnedWord;
@@ -32,6 +33,15 @@ class User extends Authenticatable
 		return $this->hasMany(LearnedWord::class);
 	}
     
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
+    }
+    
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
