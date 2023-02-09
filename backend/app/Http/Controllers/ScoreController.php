@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class ScoreController extends Controller
 {
     public function calculateScore(Request $request)
     {
+        $categoryId = $request->input('categoryId');
         $answers = $request->input('answers');
         $correctAnswers = $request->input('correctAnswers');
         $answersQuestion = $request->input('answersQuestion');
@@ -32,6 +34,13 @@ class ScoreController extends Controller
         }
         $result = $totalQuestion > 0?round(($score / $totalQuestion) * 100, 2):0;
         $isPassed = $result > $passingScore ? true : false;
+
+        if($answers > 0){
+            $category = Category::find($categoryId);
+            $title = $category->title;
+            $category->logActivity("You learned {$score} of {$totalQuestion} in {$title}");
+            $category->save();
+        }
         
         return $totalQuestion > 0
             ? response()->json([

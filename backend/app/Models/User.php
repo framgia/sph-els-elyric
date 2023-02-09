@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\User;
+use App\Traits\HasActivity;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\LearnedWord;
@@ -12,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasActivity;
 
 	protected $guard = 'user';
 

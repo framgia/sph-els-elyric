@@ -15,7 +15,7 @@ class CategorySeeder extends Seeder
 
         	Category::create([
             	'title' => $title,
-            	'description' => $description,
+            	'description' => $description
         	]);
 		}
 	}
