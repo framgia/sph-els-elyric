@@ -24,11 +24,19 @@ class LearnedWordController extends Controller
             'learned_answer' => 'required',
         ]);
     
-        LearnedWord::create(array_merge($validatedData, ['user_id' => Auth::id()]));
+        $learned_words = $validatedData['learned_word'];
+        $learned_answers = $validatedData['learned_answer'];
+    
+        foreach($learned_words as $index => $word) {
+            LearnedWord::create([
+                'learned_from' => $validatedData['learned_from'],
+                'learned_word' => $word,
+                'learned_answer' => $learned_answers[$index],
+                'user_id' => Auth::id()
+            ]);
+        }
     
         return response()->json(['message' => 'Learned word stored successfully.']);
     }
     
-    
-
 }

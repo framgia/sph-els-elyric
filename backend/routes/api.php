@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\LearnedWordController;
+use App\Http\Controllers\ScoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,9 @@ Route::post('login', [UserController::class, 'login']);
 Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::resource('categories', CategoryController::class, ['only' => ['index', 'show']]);
     Route::resource('learned-word', LearnedWordController::class, ['only' => ['show', 'store']]);
+
+    Route::post('totalscore', [ScoreController::class, 'calculateScore']);
+    Route::get('user', [UserController::class, 'userDetails']);
 
     Route::get('logout', [UserController::class, 'logout']);
 });
