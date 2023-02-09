@@ -71,10 +71,12 @@ export default function UserAnswerPage() {
     const calculate = async () => {
       try {
         const response = await calculateScore({
+          categoryId,
           answers,
           correctAnswers,
           answersQuestion,
         });
+
         setScorePercentage(response.result);
         setScore(response.score);
         setIsCorrect(response.isCorrect);
@@ -86,7 +88,9 @@ export default function UserAnswerPage() {
         console.log(error);
       }
     };
-    calculate();
+    if (currentPage === lastPage) {
+      calculate();
+    }
   }, [isDone]);
 
   const handleAnswer = (question, answer, correctAnswer) => {
@@ -122,8 +126,9 @@ export default function UserAnswerPage() {
             </div>
             {question.choices.map((choice, index) => (
               <div key={index} className="flex-1 grid gap-5">
-                {["A", "B", "C", "D"].map((letter) => (
+                {["A", "B", "C", "D"].map((letter, ind) => (
                   <button
+                    key={ind}
                     onClick={() =>
                       handleAnswer(
                         question,

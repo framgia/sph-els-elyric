@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\User;
+use App\Models\TakenCategory;
 use App\Traits\HasActivity;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -42,6 +43,11 @@ class User extends Authenticatable
     public function followings()
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
+
+    public function takenCategories()
+    {
+        return $this->hasMany(TakenCategory::class);
     }
 
     /**

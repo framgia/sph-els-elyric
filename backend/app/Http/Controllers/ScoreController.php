@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Category;
+use App\Models\TakenCategory;
+use App\Models\Activity;
+use Auth;
 
 class ScoreController extends Controller
 {
@@ -36,10 +40,22 @@ class ScoreController extends Controller
         $isPassed = $result > $passingScore ? true : false;
 
         if($answers > 0){
+            $takenCategory = new TakenCategory();
+            $takenCategory->user_id = Auth::id();
+            $takenCategory->category_id = $categoryId;
+            $takenCategory->taken = 1;
+            $takenCategory->save();
+
             $category = Category::find($categoryId);
             $title = $category->title;
-            $category->logActivity("You learned {$score} of {$totalQuestion} in {$title}");
-            $category->save();
+            
+            $activity = new Activity;
+            $activity->user_id = Auth::id();
+            $activity->description = "You learned {$score} of {$totalQuestion} in {$title}";
+            $activity->activitiable_id = $categoryId;
+            $activity->activitiable_type = "App\Models\Category";
+            $activity->save();
+            
         }
         
         return $totalQuestion > 0

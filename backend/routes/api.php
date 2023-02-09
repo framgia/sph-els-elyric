@@ -8,6 +8,8 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\LearnedWordController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\TakenCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +48,14 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::resource('learned-word', LearnedWordController::class, ['only' => ['show', 'store']]);
 
     Route::post('totalscore', [ScoreController::class, 'calculateScore']);
-    Route::get('user', [UserController::class, 'userDetails']);
-
+    
     Route::post('follow/{user}', [FollowController::class, 'follow']);
     Route::delete('unfollow/{user}', [FollowController::class, 'unfollow']);
+    
+    Route::get('activities', [ActivityController::class, 'show']);
+    Route::get('taken_category', [TakenCategoryController::class, 'isTaken']);
 
+    
+    Route::get('user', [UserController::class, 'userDetails']);
     Route::get('logout', [UserController::class, 'logout']);
 });
