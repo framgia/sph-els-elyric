@@ -88,7 +88,7 @@ export default function UserAnswerPage() {
         console.log(error);
       }
     };
-    if (currentPage === lastPage) {
+    if (isDone) {
       calculate();
     }
   }, [isDone]);
@@ -126,9 +126,9 @@ export default function UserAnswerPage() {
             </div>
             {question.choices.map((choice, index) => (
               <div key={index} className="flex-1 grid gap-5">
-                {["A", "B", "C", "D"].map((letter, ind) => (
+                {["A", "B", "C", "D"].map((letter, idx) => (
                   <button
-                    key={ind}
+                    key={idx}
                     onClick={() =>
                       handleAnswer(
                         question,

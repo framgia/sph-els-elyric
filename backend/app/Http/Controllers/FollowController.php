@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 
@@ -18,7 +19,12 @@ class FollowController extends Controller
         }
     
         auth()->user()->followings()->attach($user->id);
-        auth()->user()->logActivity("Followed user with id: {$user->id}");
+        Activity::create([
+            "user_id" => auth()->user()->id,
+            "description" => "Followed user with id: {$user->id}",
+            "activitiable_id" => $user->id,
+            "activitiable_type" => "App\Models\Follow"
+        ]);
     
         return response()->json(['message' => 'Successfully followed user']);
     }
@@ -34,7 +40,12 @@ class FollowController extends Controller
         }
     
         auth()->user()->followings()->detach($user->id);
-        auth()->user()->logActivity("Unfollowed user with id: {$user->id}");
+        Activity::create([
+            "user_id" => auth()->user()->id,
+            "description" => "Unfollowed user with id: {$user->id}",
+            "activitiable_id" => $user->id,
+            "activitiable_type" => "App\Models\Follow"
+        ]);
     
         return response()->json(['message' => 'Successfully unfollowed user']);
     }

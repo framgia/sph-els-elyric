@@ -49,13 +49,18 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
 
     Route::post('totalscore', [ScoreController::class, 'calculateScore']);
     
-    Route::post('follow/{user}', [FollowController::class, 'follow']);
-    Route::delete('unfollow/{user}', [FollowController::class, 'unfollow']);
+
+    Route::controller(FollowController::class)->group(function () {
+        Route::post('follow/{user}', 'follow');
+        Route::delete('unfollow/{user}', 'unfollow');
+    });
     
     Route::get('activities', [ActivityController::class, 'show']);
     Route::get('taken_category', [TakenCategoryController::class, 'isTaken']);
 
     
-    Route::get('user', [UserController::class, 'userDetails']);
-    Route::get('logout', [UserController::class, 'logout']);
+    Route::controller(UserController::class)->group(function () {
+        Route::get('user', 'userDetails');
+        Route::patch('logout', 'logout');
+    });
 });

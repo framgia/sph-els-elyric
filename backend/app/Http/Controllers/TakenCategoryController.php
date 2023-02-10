@@ -11,6 +11,6 @@ class TakenCategoryController extends Controller
 {
     public function isTaken(Request $request)
     {
-        return TakenCategory::all();
+        return TakenCategory::where('user_id', Auth::id())->get();
     }
 }

@@ -9,18 +9,7 @@ use Auth;
 class ActivityController extends Controller
 {
     public function show()
-{
-    $userId = Auth::id();
-    $activities = Activity::where('user_id', $userId)->get();
-    
-    $activitiesWithTypes = [];
-    foreach ($activities as $activity) {
-        $activity->activitiable_type = $activity->activitiable_type;
-        $activitiesWithTypes[] = $activity;
+    {
+        return Activity::where('user_id', Auth::id())->get();
     }
-    
-    return response()->json($activitiesWithTypes);
-}
-
-    
 }

@@ -40,22 +40,22 @@ class ScoreController extends Controller
         $isPassed = $result > $passingScore ? true : false;
 
         if($answers > 0){
-            $takenCategory = new TakenCategory();
-            $takenCategory->user_id = Auth::id();
-            $takenCategory->category_id = $categoryId;
-            $takenCategory->taken = 1;
-            $takenCategory->save();
+            
+            TakenCategory::create([
+                "user_id" => Auth::id(),
+                "category_id" => $categoryId,
+                "taken" => 1
+            ]);
 
             $category = Category::find($categoryId);
             $title = $category->title;
             
-            $activity = new Activity;
-            $activity->user_id = Auth::id();
-            $activity->description = "You learned {$score} of {$totalQuestion} in {$title}";
-            $activity->activitiable_id = $categoryId;
-            $activity->activitiable_type = "App\Models\Category";
-            $activity->save();
-            
+            Activity::create([
+                "user_id" => Auth::id(),
+                "description" => "You learned {$score} of {$totalQuestion} in {$title}",
+                "activitiable_id" => $categoryId,
+                "activitiable_type" => "App\Models\Category"
+            ]);
         }
         
         return $totalQuestion > 0
