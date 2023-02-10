@@ -68,4 +68,13 @@ class UserController extends Controller
 		$user = Auth::user();
 		return response()->json(['data' => $user]);
 	}
+
+	public function visitUser($user_id)
+	{
+		$user = User::find($user_id);
+
+		return ($user)
+			?response()->json(['data' => $user])
+			:response()->json(['error' => 'User not found'], 404);
+	}
 }

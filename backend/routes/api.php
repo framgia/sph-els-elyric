@@ -62,5 +62,6 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('user', 'userDetails');
         Route::patch('logout', 'logout');
+        Route::get('user/{user}', 'visitUser');
     });
 });
