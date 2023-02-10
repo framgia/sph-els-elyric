@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUser, showLearnedWord } from "../../api/api";
+import { getUser, showLearnedWord, getSelfActivity } from "../../api/api";
 import { useParams, Link } from "react-router-dom";
 import useUserAuth from "../../hooks/useLocalStorage";
 
@@ -7,6 +7,7 @@ export default function UserDashboard() {
   const userId = useParams();
   const [user, setUser] = useState([]);
   const [learned, setLearned] = useState([]);
+  const [selfActivities, setSelfActivities] = useState([]);
 
   useEffect(() => {
     const fetchLearned = async () => {
@@ -15,6 +16,10 @@ export default function UserDashboard() {
 
       const getUserData = await getUser();
       setUser(getUserData.data.data);
+
+      const fetchSelfActivity = await getSelfActivity();
+
+      setSelfActivities(fetchSelfActivity.data);
     };
 
     fetchLearned();
@@ -42,13 +47,16 @@ export default function UserDashboard() {
                     height={95}
                   />
                 </div>
+
                 <div>
                   <h2 className="text-xl font-semibold">{user.name}</h2>
                   <div className="grid text-blue-500 font-semibold">
                     <Link to="/words-learned">
                       Learned {totalWordLearned.length} words
                     </Link>
-                    <Link to="/categories">Learned 5 Lessons</Link>
+                    <Link to="/categories">
+                      Learned {selfActivities.length} Lessons
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -58,91 +66,35 @@ export default function UserDashboard() {
               <div className="h-[2px] bg-blue-700 mb-5"></div>
               <div className="">
                 <div className="grid gap-5">
-                  <div className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg">
-                    <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
-                      <img
-                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-                        width={60}
-                        height={60}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start justify-center mr-auto pl-5">
-                      <p>
-                        <span className="font-semibold">You</span> learned{" "}
-                        <span className="font-semibold">20 of 20</span> words in{" "}
-                        <span className="font-semibold">Lesson 28</span>.
-                      </p>
-                      <p>2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg">
-                    <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
-                      <img
-                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-                        width={60}
-                        height={60}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start justify-center mr-auto pl-5">
-                      <p>
-                        <span className="font-semibold">You</span> learned{" "}
-                        <span className="font-semibold">20 of 20</span> words in{" "}
-                        <span className="font-semibold">Lesson 28</span>.
-                      </p>
-                      <p>2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg">
-                    <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
-                      <img
-                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-                        width={60}
-                        height={60}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start justify-center mr-auto pl-5">
-                      <p>
-                        <span className="font-semibold">You</span> learned{" "}
-                        <span className="font-semibold">20 of 20</span> words in{" "}
-                        <span className="font-semibold">Lesson 28</span>.
-                      </p>
-                      <p>2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg">
-                    <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
-                      <img
-                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-                        width={60}
-                        height={60}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start justify-center mr-auto pl-5">
-                      <p>
-                        <span className="font-semibold">You</span> learned{" "}
-                        <span className="font-semibold">20 of 20</span> words in{" "}
-                        <span className="font-semibold">Lesson 28</span>.
-                      </p>
-                      <p>2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg">
-                    <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
-                      <img
-                        src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-                        width={60}
-                        height={60}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start justify-center mr-auto pl-5">
-                      <p>
-                        <span className="font-semibold">You</span> learned{" "}
-                        <span className="font-semibold">20 of 20</span> words in{" "}
-                        <span className="font-semibold">Lesson 28</span>.
-                      </p>
-                      <p>2 days ago</p>
-                    </div>
-                  </div>
+                  {selfActivities.map((activity, index) => {
+                    const date = new Date(activity.created_at);
+                    const dateString = date.toLocaleString();
+                    return (
+                      <div
+                        key={index}
+                        className="flex p-3 bg-gray-100 border border-blue-700 rounded-lg shadow-lg"
+                      >
+                        <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
+                          <img
+                            src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+                            width={60}
+                            height={60}
+                          />
+                        </div>
+
+                        <div className="relative flex flex-col items-start justify-center gap-3 mr-auto pl-5">
+                          <p>
+                            <span className="text-lg font-semibold">
+                              {activity.description}
+                            </span>
+                          </p>
+                          <p className="absolute -bottom-1 text-sm font-normal">
+                            {dateString}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

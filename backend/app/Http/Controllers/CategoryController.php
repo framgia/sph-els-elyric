@@ -16,7 +16,6 @@ class CategoryController extends Controller
 		])->get();
 	}
 
-
 	public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -31,7 +30,6 @@ class CategoryController extends Controller
 		], 201);
     }
 
-
 	public function show($categoryId)
 	{
 		return Category::with([
@@ -40,7 +38,6 @@ class CategoryController extends Controller
 			'questions.choices.answer'
 		])->findOrFail($categoryId);
 	}
-
 
 	public function update(Request $request, $categoryId)
     {
@@ -58,7 +55,6 @@ class CategoryController extends Controller
 			'message' => 'Successfully Updated!',
 		], 200);
     }
-
 
 	public function destroy($categoryId)
     {

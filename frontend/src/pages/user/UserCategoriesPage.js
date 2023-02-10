@@ -1,14 +1,18 @@
-import { getUserCategories } from "../../api/api";
+import { getUserCategories, getTakenCategory } from "../../api/api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function UserCategoriesPage() {
   const [categories, setCategories] = useState([]);
+  const [taken, setTaken] = useState([]);
 
   useEffect(() => {
     const fetch = async () => {
       const response = await getUserCategories();
       setCategories(response);
+
+      const responseTaken = await getTakenCategory();
+      setTaken(responseTaken.data);
     };
     fetch();
   }, []);

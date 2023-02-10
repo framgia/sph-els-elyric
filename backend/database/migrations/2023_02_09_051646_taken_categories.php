@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('learned_words', function (Blueprint $table) {
+        Schema::create('taken_categories', function (Blueprint $table) {
             $table->id();
+            $table->boolean('taken');
             $table->foreignId('user_id')
                 ->constrained()
-                ->cascadeOnDelete()
-                ->updateOnDelete();
-            $table->string('learned_from');
-            $table->string('learned_word');
-            $table->string('learned_answer');
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('category_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('learned_words');
+        //
     }
 };

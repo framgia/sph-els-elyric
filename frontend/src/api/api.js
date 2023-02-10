@@ -81,6 +81,19 @@ export async function calculateScore(data) {
 
   return response.data;
 }
+
+export async function getSelfActivity() {
+  const response = await userInstance.get("/activities");
+
+  return response;
+}
+
+export async function getTakenCategory() {
+  const response = await userInstance.get("/taken_category");
+
+  return response;
+}
+
 // ADMIN API
 
 export async function loginAdmin(email, password) {
