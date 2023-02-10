@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { getUser, showLearnedWord, getSelfActivity } from "../../api/api";
 import { useParams, Link } from "react-router-dom";
-import useUserAuth from "../../hooks/useLocalStorage";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 export default function UserDashboard() {
+  const { IsUser } = useLocalStorage();
   const userId = useParams();
   const [user, setUser] = useState([]);
   const [learned, setLearned] = useState([]);
   const [selfActivities, setSelfActivities] = useState([]);
+  const isUser = IsUser();
 
   useEffect(() => {
     const fetchLearned = async () => {
@@ -28,10 +30,10 @@ export default function UserDashboard() {
   const totalWordLearned = learned.map((learn) => {
     return learn.user_id.length;
   });
-
-  const { IsUser } = useUserAuth();
-
-  if (IsUser) {
+  const followingActivities = selfActivities.filter(
+    (activity) => activity.activitiable_type === "App\\Models\\Category"
+  );
+  if (isUser) {
     return (
       <div>
         <div className="w-full flex justify-center">
@@ -42,7 +44,7 @@ export default function UserDashboard() {
                 <div className="w-32 h-32 flex items-end justify-center rounded-full bg-blue-200 overflow-hidden border-2 border-blue-700 shadow-xl">
                   <img
                     className=""
-                    src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+                    src={user.profile_picture}
                     width={95}
                     height={95}
                   />
@@ -55,7 +57,7 @@ export default function UserDashboard() {
                       Learned {totalWordLearned.length} words
                     </Link>
                     <Link to="/categories">
-                      Learned {selfActivities.length} Lessons
+                      Learned {followingActivities.length} Lessons
                     </Link>
                   </div>
                 </div>
@@ -76,7 +78,7 @@ export default function UserDashboard() {
                       >
                         <div className="w-20 h-20 flex justify-center items-end bg-blue-200 border border-blue-700 rounded">
                           <img
-                            src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+                            src={user.profile_picture}
                             width={60}
                             height={60}
                           />

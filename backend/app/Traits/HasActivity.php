@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Activity;
+use Auth;
 
 trait HasActivity
 {
@@ -13,6 +14,7 @@ trait HasActivity
 
     public function logActivity(string $description)
     {
-        $this->activities()->create(['description' => $description]);
+        $this->activities()->create(['description' => $description, 'user_id' => Auth::id()]);
     }
+    
 }

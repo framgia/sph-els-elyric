@@ -76,6 +76,12 @@ export async function getUser() {
   return response;
 }
 
+export async function viewUserProfile(userId) {
+  const response = await userInstance.get(`profile/${userId}`);
+
+  return response;
+}
+
 export async function calculateScore(data) {
   const response = await userInstance.post("/totalscore", data);
 
@@ -90,6 +96,12 @@ export async function getSelfActivity() {
 
 export async function getTakenCategory() {
   const response = await userInstance.get("/taken_category");
+
+  return response;
+}
+
+export async function followUser(userId, follow) {
+  const response = await userInstance.post(`/follow/${userId}`, follow);
 
   return response;
 }
