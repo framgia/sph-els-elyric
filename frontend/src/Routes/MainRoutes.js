@@ -12,6 +12,7 @@ import AdminAddWordPage from "../pages/admin/AdminAddWordPage";
 import AdminAddCategoryPage from "../pages/admin/AdminAddCategoryPage";
 import ProtectedUserRoutes from "./ProtectedUserRoutes";
 import ProtectedAdminRoutes from "./ProtectedAdminRoutes";
+import UserProfilePage from "../pages/user/UserProfilePage";
 
 export default function MainRoutes() {
   return (
@@ -46,6 +47,7 @@ export default function MainRoutes() {
         <Route element={<ProtectedUserRoutes />}>
           <Route path="/dashboard" element={<UserDashboardPage />} />
           <Route path="/categories" element={<UserCategoriesPage />} />
+          <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/words-learned" element={<UserWordsLearned />} />
           <Route
             path="/categories/:categoryId/answer"
