@@ -51,8 +51,7 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
     
 
     Route::controller(FollowController::class)->group(function () {
-        Route::post('follow/{user}', 'follow');
-        Route::delete('unfollow/{user}', 'unfollow');
+        Route::post('follow/{user}', 'followUnfollowData');
     });
     
     Route::get('activities', [ActivityController::class, 'show']);
