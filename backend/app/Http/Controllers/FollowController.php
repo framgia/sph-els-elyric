@@ -12,20 +12,17 @@ class FollowController extends Controller
     {
         if(!$fetchOnly){
             $follow = $request->follow;
-            if (auth()->user()->id === $user->id) {
-                return response()->json(['error' => 'You cannot follow/unfollow yourself'], 400);
-            }
             if ($follow !== null) {
                 if ($follow) {
                     if (auth()->user()->followings->contains($user->id)) {
-                        return response()->json(['error' => 'You already followed this user'], 400);
+                        return response()->json(['error' => 'You already followed this user'], 200);
                     }
                 
                     auth()->user()->followings()->attach($user->id);
                     $message = "You followed {$user->name}";
                 } else {
                     if (!auth()->user()->followings->contains($user->id)) {
-                        return response()->json(['error' => 'Youl already unfollowed this user'], 400);
+                        return response()->json(['error' => 'You already unfollowed this user'], 200);
                     }
                 
                     auth()->user()->followings()->detach($user->id);
@@ -64,6 +61,8 @@ class FollowController extends Controller
                 'followersCount' => $followers->count(),
                 'whoFollowedYou' => $followers,
                 'youFollowed' => $followings,
+                'followersCountById' => $user->followers->count(),
+                'followingsCountById' => $user->followings->count()
             ]);
         }
     }

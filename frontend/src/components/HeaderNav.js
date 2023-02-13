@@ -3,10 +3,25 @@ import { useNavbar } from "../hooks/useNavbar";
 import UserLogout from "./userLogout";
 import AdminLogout from "./LogoutAdmin";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { getUser } from "../api/api";
+import { useEffect, useState } from "react";
 
 export default function HeaderNav() {
-  const { IsAdmin } = useLocalStorage();
+  const { IsAdmin, IsUser } = useLocalStorage();
   const { currentRoute, navigateTo } = useNavbar();
+  const [user, setUser] = useState([]);
+
+  const isAdmin = IsAdmin();
+  const isUser = IsUser();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const response = await getUser();
+
+      setUser(response.data.data);
+    };
+    fetch();
+  }, []);
 
   const inActiveClass =
     "text-gray-50 hover:text-gray-100 text-lg font-semibold hover:underline";
@@ -19,7 +34,7 @@ export default function HeaderNav() {
         <h1 className="text-2xl font-semibold">E-learning System</h1>
       </Link>
       <div className="flex items-center gap-5 ml-auto">
-        {!IsAdmin && (
+        {isUser && (
           <Link
             to="/categories"
             className={
@@ -30,7 +45,7 @@ export default function HeaderNav() {
             Categories
           </Link>
         )}
-        {IsAdmin && (
+        {isAdmin && (
           <Link
             to="/admin/categories"
             className={
@@ -41,7 +56,7 @@ export default function HeaderNav() {
             Categories
           </Link>
         )}
-        {!IsAdmin && (
+        {!isUser && (
           <>
             <Link
               to="/login"
@@ -61,17 +76,15 @@ export default function HeaderNav() {
             </Link>
           </>
         )}
-        {!IsAdmin && <UserLogout inActiveClass={inActiveClass} />}
-        {IsAdmin && <AdminLogout inActiveClass={inActiveClass} />}
-        <div className="flex items-end justify-center w-20 h-20 bg-gray-200 border-2 border-blue-700 rounded-full overflow-hidden cursor-pointer">
-          <Link to="/profile">
-            <img
-              src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
-              width={60}
-              height={60}
-            />
-          </Link>
-        </div>
+        {isUser && <UserLogout inActiveClass={inActiveClass} />}
+        {isAdmin && <AdminLogout inActiveClass={inActiveClass} />}
+        {isUser && (
+          <div className="flex items-end justify-center w-20 h-20 bg-gray-200 border-2 border-blue-700 rounded-full overflow-hidden cursor-pointer">
+            <Link to="/profile">
+              <img src={user.profile_picture} width={60} height={60} />
+            </Link>
+          </div>
+        )}
       </div>
       <div className=""></div>
     </div>

@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserLoginForm() {
   const [email, setEmail] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const [password, setPassword] = useState("");
   const { showToast } = useToast();
   const navigate = useNavigate();
-
+  useEffect(() => {}, [loggedIn]);
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -17,6 +18,7 @@ export default function UserLoginForm() {
       const response = await loginUser(email, password);
       localStorage.setItem("token", response.token);
       localStorage.setItem("isAdmin", false);
+      setLoggedIn(true);
       showToast("success", response.message);
       navigate(response.redirect);
     } catch (e) {
