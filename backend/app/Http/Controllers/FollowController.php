@@ -8,47 +8,63 @@ use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
-    public function follow(User $user)
+    public function followUnfollowData(User $user, Request $request, $fetchOnly = false)
     {
-        if (auth()->user()->id === $user->id) {
-            return response()->json(['error' => 'You cannot follow yourself'], 400);
+        if(!$fetchOnly){
+            $follow = $request->follow;
+            if (auth()->user()->id === $user->id) {
+                return response()->json(['error' => 'You cannot follow/unfollow yourself'], 400);
+            }
+            if ($follow !== null) {
+                if ($follow) {
+                    if (auth()->user()->followings->contains($user->id)) {
+                        return response()->json(['error' => 'You already followed this user'], 400);
+                    }
+                
+                    auth()->user()->followings()->attach($user->id);
+                    $message = "You followed {$user->name}";
+                } else {
+                    if (!auth()->user()->followings->contains($user->id)) {
+                        return response()->json(['error' => 'Youl already unfollowed this user'], 400);
+                    }
+                
+                    auth()->user()->followings()->detach($user->id);
+                    $message = "You unfollowed {$user->name}";
+                }
+            
+                Activity::create([
+                    "user_id" => auth()->user()->id,
+                    "description" => $message,
+                    "activitiable_id" => $user->id,
+                    "activitiable_type" => "App\Models\Follow"
+                ]);
+            }
+            $followings = auth()->user()->followings;
+            $followers = auth()->user()->followers;
+            $followed = auth()->user()->followings()->where('following_id', $user->id)->first() !== null;
+            
+            $followings = $followings->map(function ($following) {
+                return [
+                    'id' => $following->id,
+                    'name' => $following->name
+                ];
+            });
+            
+            $followers = $followers->map(function ($follower) {
+                return [
+                    'id' => $follower->id,
+                    'name' => $follower->name
+                ];
+            });
+
+            return response()->json([
+                'message' => isset($message) ? $message : "Fetching data from id:". auth()->user()->id . " - " . auth()->user()->name,
+                'followed' => $followed,
+                'followingsCount' => $followings->count(),
+                'followersCount' => $followers->count(),
+                'whoFollowedYou' => $followers,
+                'youFollowed' => $followings,
+            ]);
         }
-    
-        if (auth()->user()->followings->contains($user->id)) {
-            return response()->json(['error' => 'You already followed this user'], 400);
-        }
-    
-        auth()->user()->followings()->attach($user->id);
-        Activity::create([
-            "user_id" => auth()->user()->id,
-            "description" => "Followed user with id: {$user->id}",
-            "activitiable_id" => $user->id,
-            "activitiable_type" => "App\Models\Follow"
-        ]);
-    
-        return response()->json(['message' => 'Successfully followed user']);
     }
-    
-    public function unfollow(User $user)
-    {
-        if (auth()->user()->id === $user->id) {
-            return response()->json(['error' => 'You cannot unfollow yourself'], 400);
-        }
-    
-        if (!auth()->user()->followings->contains($user->id)) {
-            return response()->json(['error' => 'You already unfollowed this user'], 400);
-        }
-    
-        auth()->user()->followings()->detach($user->id);
-        Activity::create([
-            "user_id" => auth()->user()->id,
-            "description" => "Unfollowed user with id: {$user->id}",
-            "activitiable_id" => $user->id,
-            "activitiable_type" => "App\Models\Follow"
-        ]);
-    
-        return response()->json(['message' => 'Successfully unfollowed user']);
-    }
-    
-    
 }
