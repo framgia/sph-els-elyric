@@ -59,6 +59,12 @@ Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
 
     
     Route::controller(UserController::class)->group(function () {
+        Route::prefix('user/edit/{user}')->group(function (){
+            Route::put('/email', 'updateEmail');
+            Route::put('/password', 'updatePassword');
+            Route::put('/avatar', 'updateAvatar');
+            Route::put('/details', 'updateDetails');
+        });
         Route::get('user', 'userDetails');
         Route::get('profile/{user}', 'visitUser');
         Route::patch('logout', 'logout');
