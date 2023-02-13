@@ -77,4 +77,59 @@ class UserController extends Controller
 			?response()->json(['data' => $user])
 			:response()->json(['error' => 'User not found'], 404);
 	}
+
+
+	public function updateEmail(Request $request, $user_id)
+	{
+		$validatedData = $request->validate([
+			'email' => 'required|string|email|unique:users',
+		]);
+	
+		$user = User::findOrFail($user_id);
+		$user->email = $validatedData['email'];
+		$user->save();
+	
+		return response()->json(['message' => 'Email Updated Successfully.'], 200);
+	}
+
+	public function updateAvatar(Request $request, $user_id)
+	{
+		$validatedData = $request->validate([
+			'profile_picture' => 'string'
+		]);
+	
+		$user = User::findOrFail($user_id);
+		$user->profile_picture = $validatedData['profile_picture'];
+		$user->save();
+
+		return response()->json(['message' => 'Profile Picture Updated Successfully.'], 200);
+	}
+
+	public function updatePassword(Request $request, $user_id)
+	{
+		$validatedData = $request->validate([
+			'password' => 'required|string',
+		]);
+	
+		$user = User::findOrFail($user_id);
+		$user->password = Hash::make($validatedData['password']);
+		$user->save();
+
+		return response()->json(['message' => 'Password Updated Successfully.'], 200);
+	}
+
+	public function updateDetails(Request $request, $user_id)
+	{
+		$validatedData = $request->validate([
+			'name' => 'required|string',
+		]);
+	
+		$user = User::findOrFail($user_id);
+		$user->name = $validatedData['name'];
+		$user->save();
+	
+		return response()->json(['message' => 'User Details Updated Successfully.'], 200);
+	}
+
+	
 }
