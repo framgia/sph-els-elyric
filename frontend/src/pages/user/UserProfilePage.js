@@ -15,8 +15,10 @@ export default function UserProfilePage() {
       const fetchSelfActivity = await getSelfActivity();
       setSelfActivities(fetchSelfActivity.data);
 
-      const followFollowingCount = await followUser(user.id);
-      setFollowersFollowings(followFollowingCount.data);
+      const follows = await followUser(user.id, {
+        fetchOnly: true,
+      });
+      setFollowersFollowings(follows.data);
     };
 
     fetchData();
@@ -49,13 +51,13 @@ export default function UserProfilePage() {
                 <div className="sm:flex sm:gap-5 sm:justify-center w-full id text-blue-500 font-semibold text-center my-7">
                   <div>
                     <p className="text-xl font-semibold">
-                      {followersFollowings.followers}
+                      {followersFollowings.followersCount}
                     </p>
                     <p>followers</p>
                   </div>
                   <div>
                     <p className="text-xl font-semibold">
-                      {followersFollowings.followings}
+                      {followersFollowings.followingsCount}
                     </p>
                     <p>following</p>
                   </div>

@@ -27,9 +27,7 @@ export default function UserDashboard() {
     fetchLearned();
   }, []);
 
-  const totalWordLearned = learned.map((learn) => {
-    return learn.user_id.length;
-  });
+  const totalWordLearned = learned.map((learn) => learn.length);
   const followingActivities = selfActivities.filter(
     (activity) => activity.activitiable_type === "App\\Models\\Category"
   );

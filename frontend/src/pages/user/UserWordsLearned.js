@@ -34,7 +34,7 @@ export default function UserWordsLearned() {
             <div className="w-32 h-32 flex items-end justify-center rounded-full bg-blue-200 overflow-hidden border-2 border-blue-700 shadow-xl">
               <img
                 className=""
-                src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+                src={user.profile_picture}
                 width={95}
                 height={95}
               />

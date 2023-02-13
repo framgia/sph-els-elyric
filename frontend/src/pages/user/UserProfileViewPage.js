@@ -13,36 +13,45 @@ export default function UserProfileViewPage() {
   const [user, setUser] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
   const [learned, setLearned] = useState([]);
-  const [isFollow, setIsFollow] = useState(false);
+  const [followersFollowings, setFollowersFollowings] = useState([]);
   const { userId } = useParams();
   const { showToast } = useToast();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const learnedResponse = await showLearnedWord(userId);
-      setLearned(learnedResponse);
+  useEffect(
+    () => {
+      const fetchUser = async () => {
+        const learnedResponse = await showLearnedWord(userId);
+        setLearned(learnedResponse);
 
-      const response = await viewUserProfile(userId);
-      setUser(response.data.data);
+        const response = await viewUserProfile(userId);
+        setUser(response.data.data);
 
-      const current = await getUser();
-      setCurrentUser(current.data.data);
+        const current = await getUser();
+        setCurrentUser(current.data.data);
 
-      const follows = await followUser(userId, isFollow);
+        const follows = await followUser(user.id, {
+          fetchOnly: true,
+        });
+        setFollowersFollowings(follows.data);
+      };
 
-      console.log(follows);
-    };
-
-    fetchUser();
-  }, []);
+      fetchUser();
+    },
+    [user.id],
+    [followersFollowings]
+  );
 
   const totalWordLearned = learned.map((learn) => {
-    return learn.user_id.length;
+    return learn.length;
   });
 
-  const handleFollow = async () => {};
-  const handleUnfollow = async () => {};
+  const handleFollow = async (follow) => {
+    const data = follow ? { follow: true } : { follow: false };
+    const followThis = await followUser(user.id, data);
+    showToast(follow ? "success" : "warning", followThis.data.message);
 
+    setFollowersFollowings(followThis.data);
+  };
   return (
     <div>
       <div className="w-full flex justify-center">
@@ -66,13 +75,13 @@ export default function UserProfileViewPage() {
                 <div className="sm:flex sm:gap-5 sm:justify-center w-full id text-blue-500 font-semibold text-center my-7">
                   <div>
                     <p className="text-xl font-semibold">
-                      {"followersFollowings.followers"}
+                      {followersFollowings.followersCountById}
                     </p>
                     <p>followers</p>
                   </div>
                   <div>
                     <p className="text-xl font-semibold">
-                      {"followersFollowings.followings"}
+                      {followersFollowings.followingsCountById}
                     </p>
                     <p>following</p>
                   </div>
@@ -80,11 +89,11 @@ export default function UserProfileViewPage() {
 
                 {currentUser.id != userId && (
                   <>
-                    {"isFollowed" && (
+                    {followersFollowings.followed && (
                       <>
                         <div className="grid place-items-center my-5">
                           <button
-                            onClick={handleUnfollow}
+                            onClick={() => handleFollow(false)}
                             className="py-2 w-48 rounded-full bg-blue-400 hover:bg-blue-500 text-gray-100 font-semibold border-2 border-blue-700 shadow-inner"
                           >
                             Unfollow
@@ -92,11 +101,11 @@ export default function UserProfileViewPage() {
                         </div>
                       </>
                     )}
-                    {"!isFollowed" && (
+                    {!followersFollowings.followed && (
                       <>
                         <div className="grid place-items-center my-5">
                           <button
-                            onClick={handleFollow}
+                            onClick={() => handleFollow(true)}
                             className="py-2 w-48 rounded-full bg-blue-600 hover:bg-blue-700 text-gray-100 font-semibold border-2 border-blue-700 shadow-lg"
                           >
                             Follow
