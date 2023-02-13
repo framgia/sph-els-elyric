@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -130,6 +131,4 @@ class UserController extends Controller
 	
 		return response()->json(['message' => 'User Details Updated Successfully.'], 200);
 	}
-
-	
 }

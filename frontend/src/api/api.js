@@ -106,6 +106,30 @@ export async function followUser(userId, follow) {
   return response;
 }
 
+export async function updateEmail(userId, data) {
+  const response = await userInstance.put(`user/edit/${userId}/email`, data);
+
+  return response.data;
+}
+
+export async function updatePassword(userId, data) {
+  const response = await userInstance.put(`user/edit/${userId}/password`, data);
+
+  return response.data;
+}
+
+export async function updateAvatar(userId, data) {
+  const response = await userInstance.put(`user/edit/${userId}/avatar`, data);
+
+  return response.data;
+}
+
+export async function updateDetails(userId, data) {
+  const response = await userInstance.put(`user/edit/${userId}/details`, data);
+
+  return response.data;
+}
+
 // ADMIN API
 
 export async function loginAdmin(email, password) {
