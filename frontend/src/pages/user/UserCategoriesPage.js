@@ -16,7 +16,6 @@ export default function UserCategoriesPage() {
     };
     fetch();
   }, []);
-
   return (
     <div>
       <div className="sm:w-full grid place-items-center bg-blue-100">
@@ -28,18 +27,30 @@ export default function UserCategoriesPage() {
             <div className="grid lg:gap-1 w-full sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center">
               {categories.map((category, index) => (
                 <div
-                  className="bg-gray-100 sm:max-w-[500px] md:max-w-[400px] lg:max-w-[500px] p-5 m-5 border border-gray-400 rounded-lg shadow-lg"
+                  className="relative bg-gray-100 sm:max-w-[500px] md:max-w-[400px] lg:max-w-[500px] p-5 m-5 border border-gray-400 rounded-lg shadow-lg"
                   key={index}
                 >
                   <h3 className="text-xl font-semibold">{category.title}</h3>
                   <p>{category.description}</p>
                   <div className="flex justify-end">
-                    <Link
-                      to={`${category.id}/answer`}
-                      className="text-2xl font-semibold text-gray-200 hover:text-gray-100 mt-7 px-12 py-2 bg-blue-400 hover:bg-blue-500 border border-blue-500 rounded-lg"
-                    >
-                      Start
-                    </Link>
+                    {taken.some((item) => item.category_id === category.id) ? (
+                      <div>
+                        {taken
+                          .filter((item) => item.category_id === category.id)
+                          .map((getScore) => (
+                            <p className="text-2xl text-blue-600 font-semibold bg-gray-300 px-4 py-2 border-2 border-gray-400 rounded-lg shadow-md">
+                              SCORE: {getScore.score} / {getScore.total}
+                            </p>
+                          ))}
+                      </div>
+                    ) : (
+                      <Link
+                        to={`${category.id}/answer`}
+                        className="text-2xl font-semibold text-gray-200 hover:text-gray-100 mt-7 px-12 py-2 bg-blue-400 hover:bg-blue-500 border border-blue-500 rounded-lg"
+                      >
+                        Start
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}

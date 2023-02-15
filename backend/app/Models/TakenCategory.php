@@ -11,7 +11,7 @@ class TakenCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'category_id', 'taken'];
+    protected $fillable = ['user_id', 'category_id', 'taken', 'score', 'total'];
     
     public function user()
     {

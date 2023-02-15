@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function UserAnswerResultPage({
   title,
   score,
@@ -65,6 +67,15 @@ export default function UserAnswerResultPage({
             })}
           </tbody>
         </table>
+
+        <div className="flex items-center justify-center">
+          <Link
+            className="grid place-items-center w-96 text-2xl text-gray-200 font-semibold mb-10 px-7 py-2 rounded-full border bg-blue-700 hover:bg-blue-600 shadow-xl"
+            to="/categories"
+          >
+            Okay
+          </Link>
+        </div>
       </div>
     </div>
   );

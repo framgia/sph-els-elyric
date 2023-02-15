@@ -44,7 +44,9 @@ class ScoreController extends Controller
             TakenCategory::create([
                 "user_id" => Auth::id(),
                 "category_id" => $categoryId,
-                "taken" => 1
+                "taken" => 1,
+                "score" => $score,
+                "total" => $totalQuestion
             ]);
 
             $category = Category::find($categoryId);
