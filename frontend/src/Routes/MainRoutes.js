@@ -15,6 +15,7 @@ import ProtectedAdminRoutes from "./ProtectedAdminRoutes";
 import UserProfilePage from "../pages/user/UserProfilePage";
 import UserProfileViewPage from "../pages/user/UserProfileViewPage";
 import UserProfileEditPage from "../pages/user/UserProfileEditPage";
+import AdminProfileEditPage from "../pages/admin/AdminProfileEditPage";
 
 export default function MainRoutes() {
   return (
@@ -29,6 +30,7 @@ export default function MainRoutes() {
 
         {/* PROTECTED ADMIN ROUTES  */}
         <Route element={<ProtectedAdminRoutes />}>
+          <Route path="/" element={<AdminDashboardPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/categories" element={<AdminCategoriesPage />} />
           <Route
@@ -44,6 +46,10 @@ export default function MainRoutes() {
             element={<AdminCategoriesPage />}
           />
         </Route>
+        <Route
+          path="/admin/profile/edit/:userId"
+          element={<AdminProfileEditPage />}
+        />
 
         {/* PROTECTED USER ROUTES  */}
         <Route element={<ProtectedUserRoutes />}>

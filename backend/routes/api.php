@@ -35,6 +35,20 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(f
 
 	Route::post('questions/{categoryId}', [QuestionController::class, 'store']);
 	Route::get('logout', [AdminController::class, 'logout']);
+
+    Route::controller(UserController::class)->group(function (){
+        Route::prefix('user/edit/{user}')->group(function (){
+            Route::put('/email', 'updateEmail');
+            Route::put('/password', 'updatePassword');
+            Route::put('/avatar', 'updateAvatar');
+            Route::put('/details', 'updateDetails');
+        });
+        Route::get('user/{user}', 'userDetailsAdmin');
+        Route::get('users', 'index');
+        Route::delete('user/{user}','destroy');
+        Route::put('user/edit/{user}', 'update');
+    });
+    
 });
 
 
