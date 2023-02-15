@@ -27,7 +27,7 @@ export default function UserProfilePage() {
   const followingActivities = selfActivities.filter(
     (activity) => activity.activitiable_type === "App\\Models\\Category"
   );
-
+  const userId = user.id;
   return (
     <div>
       <div className="w-full flex justify-center">
@@ -70,7 +70,7 @@ export default function UserProfilePage() {
                 </div>
               </div>
               <div>
-                <Link to="/profile/edit">
+                <Link to={`/profile/edit/${userId}`}>
                   <button className="relative bg-green-600 hover:bg-green-700 text-white text-xl py-4 w-96 rounded-full shadow-xl">
                     Edit Profile
                     <img

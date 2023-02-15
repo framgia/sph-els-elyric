@@ -51,7 +51,10 @@ export default function MainRoutes() {
           <Route path="/dashboard" element={<UserDashboardPage />} />
           <Route path="/categories" element={<UserCategoriesPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/profile/edit" element={<UserProfileEditPage />} />
+          <Route
+            path="/profile/edit/:userId"
+            element={<UserProfileEditPage />}
+          />
           <Route path="/profile/:userId" element={<UserProfileViewPage />} />
           <Route path="/words-learned" element={<UserWordsLearned />} />
           <Route

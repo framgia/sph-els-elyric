@@ -44,7 +44,6 @@ export default function UserProfileViewPage() {
   const totalWordLearned = learned.map((learn) => {
     return learn.length;
   });
-
   const handleFollow = async (follow) => {
     const data = follow ? { follow: true } : { follow: false };
     const followThis = await followUser(user.id, data);

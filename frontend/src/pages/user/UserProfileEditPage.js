@@ -1,13 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  updateEmail,
+  updatePassword,
+  updateDetails,
+  updateAvatar,
+  getUser,
+} from "../../api/api";
+import { useParams, Link } from "react-router-dom";
+import { useToast } from "../../hooks/useToast";
 
 export default function UserProfileEditPage() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [password, setPassword] = useState("");
+  const [rerender, setRerender] = useState(false);
+  const userId = useParams();
+  const { showToast } = useToast();
 
-  console.log(firstName, lastName, email, profilePicture, password);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const current = await getUser();
+      setName(current.data.data.name);
+      setEmail(current.data.data.email);
+      setProfilePicture(current.data.data.profile_picture);
+      setPassword(current.data.data.password);
+    };
+
+    fetchUser();
+    setRerender(false);
+  }, [rerender]);
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+
+    try {
+      const user = await getUser();
+
+      if (user.data.data.name !== name) {
+        const response = await updateDetails(userId.userId, { name });
+        showToast("success", response.message);
+      }
+      if (user.data.data.email !== email) {
+        const response = await updateEmail(userId.userId, { email });
+        showToast("success", response.message);
+      }
+      if (user.data.data.password !== password) {
+        const response = await updatePassword(userId.userId, { password });
+        showToast("success", response.message);
+      }
+      if (user.data.data.profile_picture !== profilePicture) {
+        const response = await updateAvatar(userId.userId, {
+          profile_picture: profilePicture,
+        });
+        showToast("success", response.message);
+      }
+
+      setName("");
+      setEmail("");
+      setProfilePicture("");
+      setPassword("");
+      setRerender(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full max-w-sm mx-auto my-10">
       <h1 className="text-3xl font-bold py-5">Edit Profile</h1>
@@ -20,26 +76,12 @@ export default function UserProfileEditPage() {
             First Name
           </label>
           <input
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-500"
             id="firstName"
+            value={name}
             type="text"
             placeholder="First Name"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="lastName"
-          >
-            Last Name
-          </label>
-          <input
-            onChange={(e) => setLastName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-500"
-            id="lastName"
-            type="text"
-            placeholder="Last Name"
           />
         </div>
         <div className="mb-4">
@@ -53,6 +95,7 @@ export default function UserProfileEditPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-500"
             id="email"
+            value={email}
             type="email"
             placeholder="Email"
           />
@@ -68,6 +111,7 @@ export default function UserProfileEditPage() {
             onChange={(e) => setProfilePicture(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-500"
             id="profilePicture"
+            value={profilePicture}
             type="text"
             placeholder="Profile Picture URL"
           />
@@ -83,7 +127,7 @@ export default function UserProfileEditPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline border-blue-500"
             id="password"
-            type="password"
+            type="text"
             placeholder="Password"
           />
           <p className="text-gray-50 text-sm italic">
@@ -92,12 +136,18 @@ export default function UserProfileEditPage() {
           </p>
         </div>
         <div className="mt-10 flex items-center justify-between">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-out transition duration-150 ease-in-out">
+          <button
+            onClick={handleUpdate}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-out transition duration-150 ease-in-out"
+          >
             Save Changes
           </button>
-          <button className="bg-gray-500 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-out transition duration-150 ease-in-out">
-            Cancel
-          </button>
+          <Link
+            to="/profile"
+            className="bg-gray-500 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-out transition duration-150 ease-in-out"
+          >
+            Back
+          </Link>
         </div>
       </form>
     </div>
