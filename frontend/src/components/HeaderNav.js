@@ -3,7 +3,7 @@ import { useNavbar } from "../hooks/useNavbar";
 import UserLogout from "./userLogout";
 import AdminLogout from "./LogoutAdmin";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { getUser } from "../api/api";
+import { getUser, getUserAdmin } from "../api/api";
 import { useEffect, useState } from "react";
 
 export default function HeaderNav() {
@@ -16,9 +16,14 @@ export default function HeaderNav() {
 
   useEffect(() => {
     const fetch = async () => {
-      const response = await getUser();
-
-      setUser(response.data.data);
+      if (isUser) {
+        const response = await getUser();
+        setUser(response.data.data);
+      }
+      if (isAdmin) {
+        const response = await getUserAdmin();
+        setUser(response.data.data);
+      }
     };
     fetch();
   }, []);
@@ -46,17 +51,32 @@ export default function HeaderNav() {
           </Link>
         )}
         {isAdmin && (
-          <Link
-            to="/admin/categories"
-            className={
-              currentRoute === "/admin/categories" ? activeClass : inActiveClass
-            }
-            onClick={() => navigateTo("categories")}
-          >
-            Categories
-          </Link>
+          <>
+            <Link
+              to="/admin/dashboard"
+              className={
+                currentRoute === "/admin/dashboard"
+                  ? activeClass
+                  : inActiveClass
+              }
+              onClick={() => navigateTo("/admin/dashboard")}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/admin/categories"
+              className={
+                currentRoute === "/admin/categories"
+                  ? activeClass
+                  : inActiveClass
+              }
+              onClick={() => navigateTo("categories")}
+            >
+              Categories
+            </Link>
+          </>
         )}
-        {!isUser && (
+        {!isUser && !isAdmin && (
           <>
             <Link
               to="/login"

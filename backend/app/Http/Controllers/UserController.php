@@ -10,18 +10,23 @@ use Auth;
 
 class UserController extends Controller
 {
+	public function index(){
+		return User::all();
+	}
     public function register(Request $request)
 	{
 		$request->validate([
 			'name' => 'required|string',
     		'email' => 'required|string|email|unique:users',
     		'password' => 'required|string|confirmed',
+			'profile_picture' => 'string'
 		]);
 
 		$user = User::create([
 			'name'=>$request->name,
 			'email'=>$request->email,
 			'password'=>Hash::make($request->password),
+			'profile_picture'=>$validatedData['profile_picture'] ?? $request->profile_picture
 		]);
 
 		return response()->json([
@@ -66,7 +71,12 @@ class UserController extends Controller
 
 	public function userDetails()
 	{
-		$user = Auth::user();
+		return response()->json(['data' => Auth::user()]);
+	}
+
+	public function userDetailsAdmin($user_id)
+	{
+		$user = User::find($user_id);
 		return response()->json(['data' => $user]);
 	}
 
@@ -131,4 +141,11 @@ class UserController extends Controller
 	
 		return response()->json(['message' => 'User Details Updated Successfully.'], 200);
 	}
+
+	public function destroy($user_id)
+    {
+        User::whereId($user_id)->delete();
+
+		return response()->json(['message' => 'Deleted Successfully!']);
+    }
 }

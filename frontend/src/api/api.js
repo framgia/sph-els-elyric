@@ -4,13 +4,15 @@ export async function registerUser(
   name,
   email,
   password,
-  password_confirmation
+  password_confirmation,
+  profile_picture
 ) {
   const response = await userInstance.post("/register", {
     name,
     email,
     password,
     password_confirmation,
+    profile_picture,
   });
 
   return response.data.message;
@@ -131,6 +133,14 @@ export async function updateDetails(userId, data) {
 }
 
 // ADMIN API
+export async function getAllUsers() {
+  try {
+    const response = await adminInstance.get("/users");
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
+}
 
 export async function loginAdmin(email, password) {
   const response = await adminInstance.post("/login", {
@@ -196,4 +206,48 @@ export async function deleteCategory(categoryId) {
   const response = await adminInstance.delete(`categories/${categoryId}`);
 
   return response.data;
+}
+
+export async function deleteUser(userId) {
+  const response = await adminInstance.delete(`user/${userId}`);
+
+  return response.data;
+}
+
+export async function updateUsersFromAdmin(userId, data) {
+  const response = await adminInstance.put(`user/edit/${userId}`, data);
+
+  return response.data;
+}
+
+export async function updateEmailAdmin(userId, data) {
+  const response = await adminInstance.put(`user/edit/${userId}/email`, data);
+
+  return response.data;
+}
+
+export async function updatePasswordAdmin(userId, data) {
+  const response = await adminInstance.put(
+    `user/edit/${userId}/password`,
+    data
+  );
+
+  return response.data;
+}
+
+export async function updateAvatarAdmin(userId, data) {
+  const response = await adminInstance.put(`user/edit/${userId}/avatar`, data);
+
+  return response.data;
+}
+
+export async function updateDetailsAdmin(userId, data) {
+  const response = await adminInstance.put(`user/edit/${userId}/details`, data);
+
+  return response.data;
+}
+export async function getUserAdmin(userId) {
+  const response = await adminInstance.get(`user/${userId}`);
+
+  return response;
 }
